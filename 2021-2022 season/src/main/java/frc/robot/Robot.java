@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * directory.
  */
 public class Robot extends TimedRobot {
-  private final SpeedControllerGroup leftGroup = new SpeedControllerGroup(new Talon(0), new Talon(1), new Talon(2));
-  private final SpeedControllerGroup rightGroup = new SpeedControllerGroup(new Talon(3), new Talon(4), new Talon(5));
+  private final SpeedControllerGroup leftGroup = new SpeedControllerGroup(new Talon(0), new Talon(1));
+  private final SpeedControllerGroup rightGroup = new SpeedControllerGroup(new Talon(2), new Talon(3));
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftGroup, rightGroup);
   private final Joystick m_stick = new Joystick(0);
   private final Timer m_timer = new Timer();
