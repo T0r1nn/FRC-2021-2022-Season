@@ -25,13 +25,13 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.arcadeDrive(joystick.getRawAxis(1), joystick.getRawAxis(4));
+    subsystem.drive(this.joystick.getRawAxis(1));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.arcadeDrive(0, 0);
+    subsystem.drive(0);
   }
 
   // Returns true when the command should end.

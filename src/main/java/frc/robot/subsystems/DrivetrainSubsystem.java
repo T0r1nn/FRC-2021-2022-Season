@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -14,20 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-private WPI_TalonFX backLeft = new WPI_TalonFX(0);
-private WPI_TalonFX backRight = new WPI_TalonFX(1);
-private WPI_TalonFX frontLeft = new WPI_TalonFX(2);
-private WPI_TalonFX frontRight = new WPI_TalonFX(3);
-
-SpeedControllerGroup leftMotorGroup = new SpeedControllerGroup(frontLeft, backLeft);
-SpeedControllerGroup rightMotorGroup = new SpeedControllerGroup(frontRight, backRight);
-
-private DifferentialDrive differentialDrive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
+  Spark motor = new Spark(9);
 
   /** Creates a new DrivetrainSubsystem. */
-  public DrivetrainSubsystem() {}
+  public DrivetrainSubsystem() {
+  }
 
-  public void arcadeDrive(double forwardVelocity, double rotationalVelocity) {
-    differentialDrive.arcadeDrive(forwardVelocity, rotationalVelocity);
+  public void drive(double velocity) {
+    motor.set(velocity);
   }
 }
