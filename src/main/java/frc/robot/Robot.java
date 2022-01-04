@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    
+    System.out.println("Init TeleOp");
   }
 
   /** This function is called periodically during operator control. */

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.wpi.first.wpimath:wpimath-java:2021.1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpimath/wpimath-java/2021.1.2/192752174162dfac502d533790cd99faf70223fd/wpimath-java-2021.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpimath/wpimath-java/2021.1.2/7f1af7f53eae9e25a278c930099b11ac80a72303/wpimath-java-2021.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
