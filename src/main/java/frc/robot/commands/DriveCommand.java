@@ -11,13 +11,16 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class DriveCommand extends CommandBase {
 
   private DrivetrainSubsystem subsystem;
-  private Joystick joystick;
+  private Joystick leftJoystick;
+  private Joystick rightJoystick;
 
   /** Creates a new DriveCommand. */
-  public DriveCommand(DrivetrainSubsystem subsystemParam, Joystick joystickParam) {
+  public DriveCommand(DrivetrainSubsystem subsystemParam, Joystick leftJoystickParam, Joystick rightJoystickParam) {
+
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystemParam;
-    this.joystick = joystickParam;
+    this.leftJoystick = leftJoystickParam;
+    this.rightJoystick = rightJoystickParam;
 
     addRequirements(this.subsystem);
   }
@@ -25,13 +28,17 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.drive(this.joystick.getRawAxis(1));
+
+  double speedMult = 0.0;
+  speedMult = (-this.leftJoystick.getRawAxis(3))/4+0.25;
+
+    subsystem.tankDrive(-this.leftJoystick.getRawAxis(1)*speedMult,-this.rightJoystick.getRawAxis(1)*speedMult);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.drive(0);
+    subsystem.tankDrive(0,0);
   }
 
   // Returns true when the command should end.

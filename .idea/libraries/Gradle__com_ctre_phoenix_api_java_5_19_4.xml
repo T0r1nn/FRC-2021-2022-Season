@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.ctre.phoenix:api-java:5.19.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../Public/wpilib/2021/maven/com/ctre/phoenix/api-java/5.19.4/api-java-5.19.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../Public/wpilib/2021/maven/com/ctre/phoenix/api-java/5.19.4/api-java-5.19.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
