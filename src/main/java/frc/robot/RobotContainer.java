@@ -7,9 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DriveCommand;
+import frc.robot.commands.autonomous.MoveDistCommand;
+import frc.robot.commands.misc.OdometryCommand;
+import frc.robot.commands.misc.WaitUntilTimeCommand;
+import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,10 +26,14 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  public OdometryCommand odometry;
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
-  private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick,rightJoystick);
+  private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
+  private final MoveDistCommand autonomousMove = new MoveDistCommand(24, 0.35, odometry, drivetrainSubsystem);
+  private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(5);
+  private Command autonomous;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -33,7 +41,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
+    autonomous = new SequentialCommandGroup(autonomousMove, autonomousWait);
     drivetrainSubsystem.setDefaultCommand(driveCommand);
   }
 
@@ -47,5 +55,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+  }
+
+  public Command getAutoCommand() {
+    return autonomous;
   }
 }

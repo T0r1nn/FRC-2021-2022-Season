@@ -26,11 +26,41 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   DifferentialDrive drivetrain = new DifferentialDrive(left, right);
 
+  double inchesPerTick = 0.00920388473;
+
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
+    rightFront.setSensorPhase(false);
+    leftFront.setSensorPhase(false);
+    rightBack.setSensorPhase(false);
+    leftBack.setSensorPhase(false);
+    rightFront.setSelectedSensorPosition(0);
+    leftFront.setSelectedSensorPosition(0);
+    rightBack.setSelectedSensorPosition(0);
+    leftBack.setSelectedSensorPosition(0);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  public void arcadeDrive(double speed, double turn) {
+    drivetrain.arcadeDrive(speed, turn);
+  }
+
+  public double getLeftDistanceTicks() {
+    return -leftFront.getSelectedSensorPosition();
+  }
+
+  public double getRightDistanceTicks() {
+    return rightFront.getSelectedSensorPosition();
+  }
+
+  public double getRightDistanceInch() {
+    return getRightDistanceTicks() * inchesPerTick;
+  }
+
+  public double getLeftDistanceInch() {
+    return getLeftDistanceTicks() * inchesPerTick;
   }
 }
