@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -38,6 +39,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFront.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
     leftBack.setSelectedSensorPosition(0);
+    rightFront.setNeutralMode(NeutralMode.Brake);
+    rightBack.setNeutralMode(NeutralMode.Brake);
+    leftFront.setNeutralMode(NeutralMode.Brake);
+    leftBack.setNeutralMode(NeutralMode.Brake);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private Command m_teleOpCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutoCommand();
+    m_teleOpCommand = m_robotContainer.getTeleOpCommand();
   }
 
   /**
@@ -75,6 +77,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand.schedule();
+    m_teleOpCommand.cancel();
+    System.out.println("Auto Starting");
   }
 
   /** This function is called periodically during autonomous. */
@@ -85,6 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_autonomousCommand.cancel();
+    m_teleOpCommand.schedule();
   }
 
   /** This function is called periodically during operator control. */

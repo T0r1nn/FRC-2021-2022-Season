@@ -26,12 +26,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public OdometryCommand odometry;
+  public OdometryCommand odometry = new OdometryCommand();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
-  private final MoveDistCommand autonomousMove = new MoveDistCommand(24, 0.35, odometry, drivetrainSubsystem);
+  private final MoveDistCommand autonomousMove = new MoveDistCommand(72, 0.35, odometry, drivetrainSubsystem);
   private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(5);
   private Command autonomous;
 
@@ -42,7 +42,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     autonomous = new SequentialCommandGroup(autonomousMove, autonomousWait);
-    drivetrainSubsystem.setDefaultCommand(driveCommand);
   }
 
   /**
@@ -59,5 +58,9 @@ public class RobotContainer {
 
   public Command getAutoCommand() {
     return autonomous;
+  }
+
+  public Command getTeleOpCommand() {
+    return driveCommand;
   }
 }

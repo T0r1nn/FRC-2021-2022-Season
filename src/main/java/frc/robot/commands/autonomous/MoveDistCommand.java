@@ -36,22 +36,19 @@ public class MoveDistCommand extends CommandBase {
   @Override
   public void execute() {
     odometryCommand.execute(drivetrainSubsystem);
-    drivetrainSubsystem.arcadeDrive(moveSpeed, 0);
-    if (Math.sqrt(Math.pow(odometryCommand.x_position - startingX, 2)
-        + Math.pow(odometryCommand.y_position - startingY, 2)) > targetDistance) {
-      drivetrainSubsystem.arcadeDrive(0, 0);
-    }
+    drivetrainSubsystem.tankDrive(moveSpeed, moveSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrainSubsystem.tankDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return Math.sqrt(Math.pow(odometryCommand.x_position - startingX, 2)
-        + Math.pow(odometryCommand.y_position - startingY, 2)) <= targetDistance;
+        + Math.pow(odometryCommand.y_position - startingY, 2)) >= targetDistance;
   }
 }
