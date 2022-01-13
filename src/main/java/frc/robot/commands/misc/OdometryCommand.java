@@ -18,7 +18,7 @@ public class OdometryCommand {
     public double rotation = 0;
     public long pTime = 0;
     public long cTime = 0;
-    double gearRatio = 1 / 12.75;
+    double gearRatio = 1 / 10.71;
 
     public OdometryCommand() {
         pTime = System.currentTimeMillis();

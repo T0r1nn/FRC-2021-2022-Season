@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.autonomous.MoveDistCommand;
+import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.misc.WaitUntilTimeCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -32,7 +34,8 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(1);
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
   private final MoveDistCommand autonomousMove = new MoveDistCommand(72, 0.35, odometry, drivetrainSubsystem);
-  private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(5);
+  private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
+  private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
   private Command autonomous;
 
   /**
@@ -41,7 +44,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(autonomousMove, autonomousWait);
+    autonomous = new SequentialCommandGroup(new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
   }
 
   /**

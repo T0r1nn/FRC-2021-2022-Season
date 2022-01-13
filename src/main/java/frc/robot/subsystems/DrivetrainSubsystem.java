@@ -27,7 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   DifferentialDrive drivetrain = new DifferentialDrive(left, right);
 
-  double inchesPerTick = 0.00920388473;
+  double inchesPerTick = 0.0092084867;
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
