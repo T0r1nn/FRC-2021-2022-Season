@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DrivetrainSubsystem extends SubsystemBase {
 
   TalonFX rightFront = new TalonFX(0);
-  TalonFX leftBack = new TalonFX(1);
+  TalonFX leftBack = new TalonFX(3);
   TalonFX leftFront = new TalonFX(2);
-  TalonFX rightBack = new TalonFX(3);
+  TalonFX rightBack = new TalonFX(1);
 
   double inchesPerTick = 0.0092084867;
 
@@ -24,6 +24,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
     rightBack.follow(rightFront);
     leftBack.follow(leftFront);
+    rightBack.setInverted(true);
+    rightFront.setInverted(true);
     rightFront.setSensorPhase(false);
     leftFront.setSensorPhase(false);
     rightBack.setSensorPhase(false);
@@ -40,7 +42,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     rightFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
-    leftFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
+    leftFront.set(TalonFXControlMode.PercentOutput,leftSpeed);
   }
 
   public void arcadeDrive(double speed, double turn) {
