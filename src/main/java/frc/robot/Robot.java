@@ -78,7 +78,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand.schedule();
     m_teleOpCommand.cancel();
-    System.out.println("Auto Starting");
   }
 
   /** This function is called periodically during autonomous. */
