@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -45,6 +46,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     autonomous = new SequentialCommandGroup(new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
+    PortForwarder.add(5800, "photonvision.local", 5800);
   }
 
   /**
