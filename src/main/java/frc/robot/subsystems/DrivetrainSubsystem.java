@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -24,8 +25,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
     rightBack.follow(rightFront);
     leftBack.follow(leftFront);
-    rightBack.setInverted(true);
     rightFront.setInverted(true);
+    rightBack.setInverted(true);
     rightFront.setSensorPhase(false);
     leftFront.setSensorPhase(false);
     rightBack.setSensorPhase(false);
@@ -41,8 +42,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
-    rightFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
-    leftFront.set(TalonFXControlMode.PercentOutput,leftSpeed);
+    rightFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
+    leftFront.set(TalonFXControlMode.PercentOutput, leftSpeed);
   }
 
   public void arcadeDrive(double speed, double turn) {
@@ -86,12 +87,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
       rightSpeed /= maxMagnitude;
     }
 
-    rightFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
-    leftFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
+    rightFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
+    leftFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
   }
 
   public double getLeftDistanceTicks() {
-    return -leftFront.getSelectedSensorPosition();
+    return leftFront.getSelectedSensorPosition();
   }
 
   public double getRightDistanceTicks() {

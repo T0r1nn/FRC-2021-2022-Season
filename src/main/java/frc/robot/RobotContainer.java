@@ -44,6 +44,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    
     configureButtonBindings();
     autonomous = new SequentialCommandGroup(new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
     PortForwarder.add(5800, "photonvision.local", 5800);

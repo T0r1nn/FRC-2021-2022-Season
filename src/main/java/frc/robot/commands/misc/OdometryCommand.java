@@ -34,7 +34,7 @@ public class OdometryCommand {
         SmartDashboard.putNumber("leftTicks", drivetrain.getLeftDistanceTicks());
         SmartDashboard.putNumber("rightTicks", drivetrain.getRightDistanceTicks());
         SmartDashboard.putNumber("rotation", rotation * 180 / Math.PI);
-        double l = 21.8125 / 2;
+        double l = 23.8125 / 2;
         double leftInches = drivetrain.getLeftDistanceInch() * gearRatio - p_leftInches;
         double rightInches = drivetrain.getRightDistanceInch() * gearRatio - p_rightInches;
         p_leftInches = drivetrain.getLeftDistanceInch() * gearRatio;
