@@ -14,8 +14,10 @@ import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.misc.WaitUntilTimeCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
+import frc.robot.commands.teleOp.ClimberCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -35,13 +37,15 @@ public class RobotContainer {
   public OdometryCommand odometry = new OdometryCommand();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   private final Joystick buttonBoard = new Joystick(2);
 
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
-  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, buttonBoard);
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, buttonBoard, rightJoystick);
+  private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, buttonBoard);
   private final MoveDistCommand autonomousMove = new MoveDistCommand(72, 0.35, odometry, drivetrainSubsystem);
   private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
@@ -57,7 +61,7 @@ public class RobotContainer {
     
     configureButtonBindings();
     autonomous = new SequentialCommandGroup(new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
-    teleOp = new ParallelCommandGroup(intakeCommand, driveCommand);
+    teleOp = new ParallelCommandGroup(intakeCommand, driveCommand, climberCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
   }
 
