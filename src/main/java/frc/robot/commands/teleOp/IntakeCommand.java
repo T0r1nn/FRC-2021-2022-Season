@@ -12,15 +12,13 @@ public class IntakeCommand extends CommandBase {
 
   private IntakeSubsystem subsystem;
   private Joystick buttonBoard;
-  private Joystick rightJoystick;
 
   /** Creates a new DriveCommand. */
-  public IntakeCommand(IntakeSubsystem subsystemParam, Joystick buttonBoardParam, Joystick rightJoystickParam) {
+  public IntakeCommand(IntakeSubsystem subsystemParam, Joystick buttonBoardParam) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystemParam;
     this.buttonBoard = buttonBoardParam;
-    this.rightJoystick = rightJoystickParam;
 
     addRequirements(this.subsystem);
   }
@@ -30,19 +28,20 @@ public class IntakeCommand extends CommandBase {
   public void execute() {
 
     double intakeSpeed = 0.0;
-    double intakeMult = -this.rightJoystick.getRawAxis(3)/4 +0.25;
-    if(this.buttonBoard.getRawButton(1)){
-      intakeSpeed = intakeMult;
+    if(this.buttonBoard.getRawButton(11)){
+      intakeSpeed = 0.3;
+    }else if(this.buttonBoard.getRawButton(10)){
+      intakeSpeed = -0.3;
     }else{
       intakeSpeed = 0.0;
     }
-    subsystem.runIntake(intakeSpeed, false);
+    subsystem.runIntake(intakeSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.runIntake(0, false);
+    subsystem.runIntake(0);
   }
 
   // Returns true when the command should end.
