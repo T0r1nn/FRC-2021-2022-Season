@@ -13,7 +13,7 @@ public class ShooterCommand extends CommandBase {
   private ShooterSubsystem subsystem;
   private Joystick buttonBoard;
   double shooterSpeed = 0.0;
-  double shooterMult = 1.0;
+  double shooterMult = -0.5;
 
   /** Creates a new DriveCommand. */
   public ShooterCommand(ShooterSubsystem subsystemParam, Joystick buttonBoardParam) {
