@@ -12,6 +12,8 @@ public class ShooterCommand extends CommandBase {
 
   private ShooterSubsystem subsystem;
   private Joystick buttonBoard;
+  double shooterSpeed = 0.0;
+  double shooterMult = 1.0;
 
   /** Creates a new DriveCommand. */
   public ShooterCommand(ShooterSubsystem subsystemParam, Joystick buttonBoardParam) {
@@ -26,16 +28,13 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double shooterSpeed = 0.0;
-    double shooterMult = 1.0;
     if(this.buttonBoard.getRawAxis(0) < -0.5){
       shooterMult += 0.001;
     }else if(this.buttonBoard.getRawAxis(1) > 0.5){
       shooterMult -= 0.001;
     }
     if(this.buttonBoard.getRawButton(2)){
-    shooterSpeed = shooterMult;
+      shooterSpeed = shooterMult;
     }else{
       shooterSpeed = 0;
     }

@@ -4,12 +4,13 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  PWMSparkMax shooter = new PWMSparkMax(5);
+  CANSparkMax shooter = new CANSparkMax(5, MotorType.kBrushed);
   /** Creates a new IntakeSubsystem. */
   public ShooterSubsystem() {}
 

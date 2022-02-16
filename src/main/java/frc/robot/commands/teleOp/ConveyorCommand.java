@@ -29,9 +29,9 @@ public class ConveyorCommand extends CommandBase {
 
     double conveyorSpeed = 0.0;
     if(this.buttonBoard.getRawButton(1)){
-      conveyorSpeed = 0.1;
+      conveyorSpeed = 0.5;
     }else if(this.buttonBoard.getRawButton(8)){
-      conveyorSpeed = -0.1;
+      conveyorSpeed = -0.5;
     }else{
       conveyorSpeed = 0;
     }

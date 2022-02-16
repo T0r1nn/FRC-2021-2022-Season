@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ConveyorSubsystem extends SubsystemBase {
 
-  PWMSparkMax conveyor = new PWMSparkMax(5);
+  CANSparkMax conveyor = new CANSparkMax(6, MotorType.kBrushed);
   /** Creates a new IntakeSubsystem. */
   public ConveyorSubsystem() {}
 
