@@ -13,7 +13,7 @@ public class ShooterCommand extends CommandBase {
 
   private ShooterSubsystem subsystem;
   private Joystick buttonBoard;
-  double shooterSpeed = -0.5;
+  double shooterSpeed = -0.4;
   boolean shootButtonPressed = false;
   boolean shooterToggled = false;
 
@@ -32,7 +32,7 @@ public class ShooterCommand extends CommandBase {
   public void execute() {
     if(this.buttonBoard.getRawAxis(0) < -0.75){
       shooterSpeed += 0.001;
-    }else if(this.buttonBoard.getRawAxis(1) < -0.75){
+    }else if(this.buttonBoard.getRawAxis(1) < -0.75 && shooterSpeed > -0.7){
       shooterSpeed -= 0.001;
     }
     // if(this.buttonBoard.getRawButton(2)){
