@@ -5,6 +5,7 @@
 package frc.robot.commands.teleOp;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -12,8 +13,9 @@ public class ShooterCommand extends CommandBase {
 
   private ShooterSubsystem subsystem;
   private Joystick buttonBoard;
-  double shooterSpeed = 0.0;
-  double shooterMult = -0.5;
+  double shooterSpeed = -0.5;
+  boolean shootButtonPressed = false;
+  boolean shooterToggled = false;
 
   /** Creates a new DriveCommand. */
   public ShooterCommand(ShooterSubsystem subsystemParam, Joystick buttonBoardParam) {
@@ -28,17 +30,24 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(this.buttonBoard.getRawAxis(0) < -0.5){
-      shooterMult += 0.001;
-    }else if(this.buttonBoard.getRawAxis(1) > 0.5){
-      shooterMult -= 0.001;
+    if(this.buttonBoard.getRawAxis(0) < -0.75){
+      shooterSpeed += 0.001;
+    }else if(this.buttonBoard.getRawAxis(1) < -0.75){
+      shooterSpeed -= 0.001;
     }
-    if(this.buttonBoard.getRawButton(2)){
-      shooterSpeed = shooterMult;
-    }else{
-      shooterSpeed = 0;
+    // if(this.buttonBoard.getRawButton(2)){
+    //   shooterSpeed = shooterMult;
+    // }else{
+    //   shooterSpeed = 0;
+    // }
+    if(this.buttonBoard.getRawButton(2) && !shootButtonPressed){
+      shootButtonPressed = true;
+      shooterToggled = !shooterToggled;
+    }else if(!this.buttonBoard.getRawButton(2)){
+      shootButtonPressed = false;
     }
-    subsystem.runShooter(shooterSpeed);
+    SmartDashboard.putNumber("Shooter Speed",-100*shooterSpeed);
+    subsystem.runShooter(shooterToggled?shooterSpeed:0);
   }
 
   // Called once the command ends or is interrupted.
