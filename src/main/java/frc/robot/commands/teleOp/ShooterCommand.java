@@ -35,11 +35,6 @@ public class ShooterCommand extends CommandBase {
     }else if(this.buttonBoard.getRawAxis(1) < -0.75){
       shooterSpeed -= 0.001;
     }
-    // if(this.buttonBoard.getRawButton(2)){
-    //   shooterSpeed = shooterMult;
-    // }else{
-    //   shooterSpeed = 0;
-    // }
     if(this.buttonBoard.getRawButton(2) && !shootButtonPressed){
       shootButtonPressed = true;
       shooterToggled = !shooterToggled;
