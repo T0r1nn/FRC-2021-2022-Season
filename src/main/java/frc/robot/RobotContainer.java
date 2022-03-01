@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignCommand;
@@ -33,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -72,7 +70,7 @@ public class RobotContainer {
   public final NetworkTableEntry ty = table.getEntry("ty");
   public final NetworkTableEntry ta = table.getEntry("ta");
   private final JoystickButton autoAlignButton = new JoystickButton(buttonBoard, 5);
-  private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(ta, drivetrainSubsystem, buttonBoard);
+  private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
 
   private Command teleOp;
   private Command autonomous;

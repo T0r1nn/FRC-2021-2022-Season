@@ -6,20 +6,17 @@ package frc.robot.commands.misc;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class AutoAlignCommand extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
-  private Joystick buttonBoardJoystick;
   /** Creates a new AutoAlignCommand. */
-  public AutoAlignCommand(DrivetrainSubsystem subsystem, Joystick buttonBoard) {
+  public AutoAlignCommand(DrivetrainSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     drivetrainSubsystem = subsystem;
     addRequirements(subsystem);
-    buttonBoardJoystick = buttonBoard;
   }
 
   // Called when the command is initially scheduled.
@@ -38,22 +35,19 @@ public class AutoAlignCommand extends CommandBase {
 
     double left_command = 0.0;
     double right_command = 0.0;
-
-    if (buttonBoardJoystick.getRawButton(5))
+    double heading_error = -tx;
+    double steering_adjust = 0.0f;
+    
+    if (tx > 1.0)
     {
-      double heading_error = -tx;
-      double steering_adjust = 0.0f;
-      if (tx > 1.0)
-      {
-        steering_adjust = Kp*heading_error - min_command;
-      }
-      else if (tx < 1.0)
-      {
-        steering_adjust = Kp*heading_error + min_command;
-      }
-      left_command += steering_adjust;
-      right_command -= steering_adjust;
+      steering_adjust = Kp*heading_error - min_command;
     }
+    else if (tx < 1.0)
+    {
+      steering_adjust = Kp*heading_error + min_command;
+    }
+    left_command += steering_adjust;
+    right_command -= steering_adjust;
 
     SmartDashboard.putNumber("tx",tx);
     SmartDashboard.putNumber("turnSpeed", Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command/Math.abs(left_command)));

@@ -5,7 +5,6 @@
 package frc.robot.commands.misc;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** An example command that uses an example subsystem. */
