@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class AutoAlignCommand extends CommandBase {
+public class AutoAlignAndDrive extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
-  /** Creates a new AutoAlignCommand. */
-  public AutoAlignCommand(DrivetrainSubsystem subsystem) {
+  /** Creates a new AutoSeekCommand. */
+  public AutoAlignAndDrive(DrivetrainSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     drivetrainSubsystem = subsystem;
     addRequirements(subsystem);
@@ -27,7 +27,7 @@ public class AutoAlignCommand extends CommandBase {
   @Override
   public void execute() {
     double Kp = -0.015f;
-    double min_command = 0.05f;
+    double min_command = 0.02f;
     double max_speed = 0.4;
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
@@ -35,9 +35,10 @@ public class AutoAlignCommand extends CommandBase {
 
     double left_command = 0.0;
     double right_command = 0.0;
+    double steerWeight = 0.7;
+
     double heading_error = -tx;
     double steering_adjust = 0.0f;
-    
     if (tx > 1.0)
     {
       steering_adjust = Kp*heading_error - min_command;
@@ -48,6 +49,10 @@ public class AutoAlignCommand extends CommandBase {
     }
     left_command += steering_adjust;
     right_command -= steering_adjust;
+    left_command *= steerWeight;
+    right_command *= steerWeight;
+    left_command += 1-steerWeight;
+    right_command += 1-steerWeight;
 
     SmartDashboard.putNumber("tx",tx);
     SmartDashboard.putNumber("turnSpeed", Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command/Math.abs(left_command)));

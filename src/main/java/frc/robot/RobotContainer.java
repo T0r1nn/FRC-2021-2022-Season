@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
+import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
 import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
@@ -70,7 +71,9 @@ public class RobotContainer {
   public final NetworkTableEntry ty = table.getEntry("ty");
   public final NetworkTableEntry ta = table.getEntry("ta");
   private final JoystickButton autoAlignButton = new JoystickButton(buttonBoard, 5);
+  private final JoystickButton autoAlignAndDriveButton = new JoystickButton(buttonBoard, 4);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
+  private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
 
   private Command teleOp;
   private Command autonomous;
@@ -97,6 +100,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     autoAlignButton.whenHeld(autoAlignCommand);
+    autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
   }
 
   public Command getAutoCommand() {
