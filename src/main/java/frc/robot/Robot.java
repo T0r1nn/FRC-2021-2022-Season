@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  //private Command m_autonomousCommand;
   private Command m_teleOpCommand;
-
+  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
   /**
@@ -59,6 +60,9 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("tx", m_robotContainer.tx.getDouble(0.0));
+    SmartDashboard.putNumber("ty", m_robotContainer.ty.getDouble(0.0));
+    SmartDashboard.putNumber("ta", m_robotContainer.ta.getDouble(0.0));
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -89,6 +93,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_autonomousCommand.cancel();
     m_teleOpCommand.schedule();
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
   }
 
   /** This function is called periodically during operator control. */
@@ -105,5 +110,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+  }
+
+  @Override
+  public boolean isDisabled(){
+    return !m_robotContainer.buttonBoard.getRawButton(12);
   }
 }

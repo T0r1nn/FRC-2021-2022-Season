@@ -31,8 +31,6 @@ public class OdometryCommand {
         cTime = System.currentTimeMillis();
         SmartDashboard.putNumber("x_position", x_position);
         SmartDashboard.putNumber("y_position", y_position);
-        SmartDashboard.putNumber("leftTicks", drivetrain.getLeftDistanceTicks());
-        SmartDashboard.putNumber("rightTicks", drivetrain.getRightDistanceTicks());
         SmartDashboard.putNumber("rotation", rotation * 180 / Math.PI);
         double l = 23.8125 / 2;
         double leftInches = drivetrain.getLeftDistanceInch() * gearRatio - p_leftInches;
@@ -46,7 +44,5 @@ public class OdometryCommand {
         double deltaY = deltaS * Math.sin(rotation + deltaAngle / 2);
         x_position += deltaX;
         y_position += deltaY;
-        double delta = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-        SmartDashboard.putNumber("velocity(i/s)", (delta / cTime) * 1000);
     }
 }

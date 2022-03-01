@@ -4,22 +4,18 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class LEDSubsystem extends SubsystemBase {
+  Spark blinkin1 = new Spark(2);
+  Spark blinkin2 = new Spark(3);
 
-  CANSparkMax shooter = new CANSparkMax(6, MotorType.kBrushed);
-  /** Creates a new IntakeSubsystem. */
-  public ShooterSubsystem() {}
+  /** Creates a new LEDSubsystem. */
+  public LEDSubsystem() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-  public void runShooter(double speed){
-    shooter.set(speed);
   }
 }

@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.net.PortForwarder;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.commands.autonomous.MoveDistCommand;
+import frc.robot.commands.autonomous.ShootOneBallCommand;
+import frc.robot.commands.misc.AutoAlignCommand;
 import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.misc.WaitUntilTimeCommand;
@@ -26,6 +33,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -46,16 +55,24 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
-  private final Joystick buttonBoard = new Joystick(2);
+  public final Joystick buttonBoard = new Joystick(2);
+  private ADXRS450_Gyro climberBalancerGyro = new ADXRS450_Gyro();
 
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, buttonBoard);
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
-  private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, buttonBoard);
+  private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
   private final MoveDistCommand autonomousMove = new MoveDistCommand(72, 0.35, odometry, drivetrainSubsystem);
   private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
+  private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
+  private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
+  public final NetworkTableEntry tx = table.getEntry("tx");
+  public final NetworkTableEntry ty = table.getEntry("ty");
+  public final NetworkTableEntry ta = table.getEntry("ta");
+  private final JoystickButton autoAlignButton = new JoystickButton(buttonBoard, 5);
+  private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(ta, drivetrainSubsystem, buttonBoard);
 
   private Command teleOp;
   private Command autonomous;
@@ -67,8 +84,8 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
-    teleOp = new ParallelCommandGroup(intakeCommand, driveCommand, climberCommand, conveyorCommand, shooterCommand);
+    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
+    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
   }
 
@@ -81,7 +98,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    autoAlignButton.whenHeld(autoAlignCommand);
   }
 
   public Command getAutoCommand() {
@@ -90,5 +107,13 @@ public class RobotContainer {
 
   public Command getTeleOpCommand() {
     return teleOp;
+  }
+
+  public Command getDriveCommand() {
+    return driveCommand;
+  }
+
+  public DrivetrainSubsystem getDriveSubsystem(){
+    return drivetrainSubsystem;
   }
 }

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ConveyorSubsystem extends SubsystemBase {
 
-  CANSparkMax conveyor = new CANSparkMax(6, MotorType.kBrushless);
+  CANSparkMax conveyor = new CANSparkMax(5, MotorType.kBrushless);
   /** Creates a new IntakeSubsystem. */
   public ConveyorSubsystem() {}
 

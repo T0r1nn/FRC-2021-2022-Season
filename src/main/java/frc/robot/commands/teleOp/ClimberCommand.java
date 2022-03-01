@@ -5,18 +5,21 @@
 package frc.robot.commands.teleOp;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimberCommand extends CommandBase {
   private ClimberSubsystem subsystem;
   private Joystick buttonBoard;
+  private ADXRS450_Gyro balanceGyro;
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem subsystemParam, Joystick buttonBoardParam) {
+  public ClimberCommand(ClimberSubsystem subsystemParam, ADXRS450_Gyro balanceGyro, Joystick buttonBoardParam) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystemParam;
     this.buttonBoard = buttonBoardParam;
-
+    this.balanceGyro = balanceGyro;
     addRequirements(this.subsystem);
   }
 
@@ -27,11 +30,12 @@ public class ClimberCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("angle",balanceGyro.getAngle());
     double climberSpeed = 0.0;
-    if(this.buttonBoard.getRawButton(3)){
-      climberSpeed = 0.1;
-    }else if(this.buttonBoard.getRawButton(6)){
-      climberSpeed = -0.1;
+    if(this.buttonBoard.getRawButton(6)){
+      climberSpeed = 0.2;
+    }else if(this.buttonBoard.getRawButton(3)){
+      climberSpeed = -0.2;
     }else{
       climberSpeed = 0.0;
     }
