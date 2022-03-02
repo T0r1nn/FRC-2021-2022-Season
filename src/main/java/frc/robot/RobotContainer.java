@@ -16,6 +16,7 @@ import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
+import frc.robot.commands.misc.AutoSeekCommand;
 import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.misc.WaitUntilTimeCommand;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -85,7 +87,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), autonomousMove);
+    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), new ParallelRaceGroup(new WaitCommand(2),autoAlignAndDrive));
     teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
   }
