@@ -12,11 +12,9 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
-import frc.robot.commands.misc.AutoSeekCommand;
 import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.misc.WaitUntilTimeCommand;
@@ -64,7 +62,6 @@ public class RobotContainer {
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
-  private final MoveDistCommand autonomousMove = new MoveDistCommand(72, 0.35, odometry, drivetrainSubsystem);
   private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
@@ -76,6 +73,7 @@ public class RobotContainer {
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(buttonBoard, 4);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
+  private final AutoAlignAndDrive autonomousDrive = new AutoAlignAndDrive(drivetrainSubsystem);
 
   private Command teleOp;
   private Command autonomous;
@@ -87,7 +85,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), new ParallelRaceGroup(new WaitCommand(2),autoAlignAndDrive));
+    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), new ParallelRaceGroup(new WaitCommand(2),autonomousDrive));
     teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
   }
