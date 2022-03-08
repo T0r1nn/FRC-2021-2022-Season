@@ -70,8 +70,8 @@ public class RobotContainer {
   public final NetworkTableEntry tx = table.getEntry("tx");
   public final NetworkTableEntry ty = table.getEntry("ty");
   public final NetworkTableEntry ta = table.getEntry("ta");
-  private final JoystickButton autoAlignButton = new JoystickButton(buttonBoard, 5);
-  private final JoystickButton autoAlignAndDriveButton = new JoystickButton(buttonBoard, 4);
+  private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
+  private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDrive autonomousDrive = new AutoAlignAndDrive(drivetrainSubsystem);
