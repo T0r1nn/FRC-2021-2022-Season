@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -82,6 +83,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand.schedule();
     m_teleOpCommand.cancel();
+    SmartDashboard.setDefaultBoolean("team is red", true);
+    boolean team = SmartDashboard.getBoolean("team is red",true);
+    boolean collect = SmartDashboard.getBoolean("collect", true);
+    SmartDashboard.setDefaultNumber("delay", 0.0);
+    double delay = SmartDashboard.getNumber("delay", 0.0);
+    System.out.println(team);
+    m_robotContainer.table.getEntry("pipeline").setDouble(team ? 0 : 1);
   }
 
   /** This function is called periodically during autonomous. */

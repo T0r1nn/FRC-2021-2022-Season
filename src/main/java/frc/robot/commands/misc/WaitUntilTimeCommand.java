@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class WaitUntilTimeCommand extends CommandBase {
   /** Creates a new WaitUntilTimeCommand. */
   double targetTime = 0;
+  double startTime = 0;
 
   public WaitUntilTimeCommand(double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     targetTime = time;
+    startTime = Timer.getMatchTime();
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +27,7 @@ public class WaitUntilTimeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("match time", Timer.getMatchTime());
+    targetTime = SmartDashboard.getNumber("delay", 0.0);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +38,6 @@ public class WaitUntilTimeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getMatchTime() <= targetTime;
+    return startTime-Timer.getMatchTime() > targetTime;
   }
 }

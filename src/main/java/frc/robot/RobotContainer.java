@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
@@ -65,7 +66,7 @@ public class RobotContainer {
   private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
-  private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
+  public final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
   public final NetworkTableEntry tx = table.getEntry("tx");
   public final NetworkTableEntry ty = table.getEntry("ty");
   public final NetworkTableEntry ta = table.getEntry("ta");
@@ -85,7 +86,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(autonomousWait, idle), new ParallelRaceGroup(new WaitCommand(2),autonomousDrive));
+    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(new WaitCommand(SmartDashboard.getNumber("delay", 0.0)), idle), new ParallelRaceGroup(new WaitCommand(2),autonomousDrive));
     teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
   }
