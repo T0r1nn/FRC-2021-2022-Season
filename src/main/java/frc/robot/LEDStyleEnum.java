@@ -1,0 +1,65 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+/** Add your docs here. */
+enum LEDStyleEnum {
+    HOTPINK(0.57),
+    DARKRED(0.59),
+    RED(0.61),
+    REDORANGE(0.64),
+    ORANGE(0.65),
+    GOLD(0.67),
+    YELLOW(0.69),
+    LAWNGREEN(0.71),
+    LIME(0.73),
+    DARKGREEN(0.75),
+    GREEN(0.77),
+    BLUEGREEN(0.79),
+    AQUA(0.81),
+    SKYBLUE(0.83),
+    DARKBLUE(0.85),
+    BLUE(0.87),
+    BLUEVIOLET(0.89),
+    VIOLET(0.91),
+    WHITE(0.93),
+    GRAY(0.95),
+    DARKGRAY(0.97),
+    BLACK(0.99),
+    RAINBOW(-0.99),
+    CONFETTI(-0.87),
+    COLOR1ENDTOENDBLENDTOBLACK(-0.03),
+    COLOR1LARSONSCANNER(-0.01),
+    COLOR1LIGHTCHASE(0.01),
+    COLOR1HEARTBEATSLOW(0.03),
+    COLOR1HEARTBEATMEDIUM(0.05),
+    COLOR1HEARTBEATFAST(0.07),
+    COLOR1BREATHSLOW(0.09),
+    COLOR1BREATHFAST(0.11),
+    COLOR1SHOT(0.13),
+    COLOR1STROBE(0.15),
+    COLOR2ENDTOENDBLENDTOBLACK(0.17),
+    COLOR2LARSONSCANNER(0.19),
+    COLOR2LIGHTCHASE(0.21),
+    COLOR2HEARTBEATSLOW(0.23),
+    COLOR2HEARTBEATMEDIUM(0.25),
+    COLOR2HEARTBEATFAST(0.27),
+    COLOR2BREATHSLOW(0.29),
+    COLOR2BREATHFAST(0.31),
+    COLOR2SHOT(0.33),
+    COLOR2STROBE(0.35),
+    SPARKLE12(0.37),
+    SPARKLE21(0.39),
+    GRADIENT(0.41),
+    BPM(0.43),
+    ENDTOENDBLEND12(0.45),
+    ENDTOENDBLEND(0.47),
+    NOBLENDING(0.49),
+    TWINKLES(0.51),
+    COLORWAVES(0.53),
+    SINELON(0.55);
+    public double value;
+    LEDStyleEnum(double val){this.value = val;}
+}

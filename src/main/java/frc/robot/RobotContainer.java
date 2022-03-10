@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
 import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
-import frc.robot.commands.misc.WaitUntilTimeCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
 import frc.robot.commands.teleOp.ClimberCommand;
@@ -26,6 +26,7 @@ import frc.robot.commands.teleOp.ConveyorCommand;
 import frc.robot.commands.teleOp.ShooterCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
@@ -53,6 +54,7 @@ public class RobotContainer {
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final LEDSubsystem LEDS = new LEDSubsystem();
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   public final Joystick buttonBoard = new Joystick(2);
@@ -63,7 +65,6 @@ public class RobotContainer {
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
-  private final WaitUntilTimeCommand autonomousWait = new WaitUntilTimeCommand(8);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
   public final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
@@ -74,7 +75,8 @@ public class RobotContainer {
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
-  private final AutoAlignAndDrive autonomousDrive = new AutoAlignAndDrive(drivetrainSubsystem);
+  private final AutoAlignAndDrive autonomousIntake = new AutoAlignAndDrive(drivetrainSubsystem);
+  private final MoveDistCommand autonomousDrive = new MoveDistCommand(72, 0.5, odometry, drivetrainSubsystem);
 
   private Command teleOp;
   private Command autonomous;
@@ -86,9 +88,14 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    autonomous = new SequentialCommandGroup(autonomousShoot,new ParallelRaceGroup(new WaitCommand(SmartDashboard.getNumber("delay", 0.0)), idle), new ParallelRaceGroup(new WaitCommand(2),autonomousDrive));
     teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
+    LEDS.setBlinkin1Pattern(LEDStyleEnum.LIME.value);
+    LEDS.setBlinkin2Pattern(LEDStyleEnum.LIME.value);
+  }
+
+  public LEDSubsystem getLEDS() {
+      return LEDS;
   }
 
   /**
@@ -114,6 +121,53 @@ public class RobotContainer {
 
   public Command getDriveCommand() {
     return driveCommand;
+  }
+
+  public void setAutoCommand() {
+    boolean shoot = SmartDashboard.getBoolean("Shoot?", true);
+    boolean intake = SmartDashboard.getBoolean("Intake?", true);
+    double delay = SmartDashboard.getNumber("delay", 0.0);
+    if(shoot && intake){
+      autonomous = new SequentialCommandGroup(
+        autonomousShoot,
+        new ParallelRaceGroup(
+          new WaitCommand(delay),
+          idle
+        ), 
+        new ParallelRaceGroup(
+          new WaitCommand(2),
+          autonomousIntake
+        )
+      );
+    }else if(shoot){
+      autonomous = new SequentialCommandGroup(
+        autonomousShoot,
+        new ParallelRaceGroup(
+          new WaitCommand(delay),
+          idle
+        ), 
+        autonomousDrive
+      );
+    }else if(intake){
+      autonomous = new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new WaitCommand(delay),
+          idle
+        ), 
+        new ParallelRaceGroup(
+          new WaitCommand(2),
+          autonomousIntake
+        )
+      );
+    }else{
+      autonomous = new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new WaitCommand(delay),
+          idle
+        ), 
+        autonomousDrive
+      );
+    }
   }
 
   public DrivetrainSubsystem getDriveSubsystem(){
