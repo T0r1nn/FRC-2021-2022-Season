@@ -81,8 +81,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_robotContainer.setAutoCommand();
-    m_autonomousCommand = m_robotContainer.getAutoCommand();
+    if(m_autonomousCommand == null){
+      m_robotContainer.setAutoCommand();
+      m_autonomousCommand = m_robotContainer.getAutoCommand();
+    }
     m_autonomousCommand.schedule();
     m_teleOpCommand.cancel();
     boolean team = SmartDashboard.getBoolean("team is red",true);
@@ -97,6 +99,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    if(m_autonomousCommand == null){
+      m_robotContainer.setAutoCommand();
+      m_autonomousCommand = m_robotContainer.getAutoCommand();
+    }
     m_autonomousCommand.cancel();
     m_teleOpCommand.schedule();
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());

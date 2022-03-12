@@ -90,8 +90,8 @@ public class RobotContainer {
     configureButtonBindings();
     teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
-    LEDS.setBlinkin1Pattern(LEDStyleEnum.LIME.value);
-    LEDS.setBlinkin2Pattern(LEDStyleEnum.LIME.value);
+    LEDS.setBlinkin1Pattern(LEDStyleEnum.BLUE.value);
+    LEDS.setBlinkin2Pattern(LEDStyleEnum.BLUE.value);
   }
 
   public LEDSubsystem getLEDS() {
