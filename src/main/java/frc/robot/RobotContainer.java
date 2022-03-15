@@ -25,6 +25,7 @@ import frc.robot.commands.teleOp.IntakeCommand;
 import frc.robot.commands.teleOp.ClimberCommand;
 import frc.robot.commands.teleOp.ConveyorCommand;
 import frc.robot.commands.teleOp.ShooterCommand;
+import frc.robot.commands.teleOp.ShooterMacro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
+  private final ShooterMacro shooterMacro = new ShooterMacro(shooterSubsystem, conveyorSubsystem, buttonBoard);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
   public final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
@@ -74,6 +76,7 @@ public class RobotContainer {
   public final NetworkTableEntry ta = table.getEntry("ta");
   private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
+  private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDrive autonomousIntake = new AutoAlignAndDrive(drivetrainSubsystem);
@@ -90,7 +93,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, conveyorCommand, shooterCommand);
+    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
     LEDS.setBlinkin1Pattern(LEDStyleEnum.BLUE.value);
     LEDS.setBlinkin2Pattern(LEDStyleEnum.BLUE.value);
@@ -111,6 +114,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     autoAlignButton.whenHeld(autoAlignCommand);
     autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
+    shootMacroButton.whenPressed(shooterMacro);
   }
 
   public Command getAutoCommand() {
@@ -176,5 +180,21 @@ public class RobotContainer {
 
   public DrivetrainSubsystem getDriveSubsystem(){
     return drivetrainSubsystem;
+  }
+
+  public ConveyorSubsystem getConveyorSubsystem() {
+      return conveyorSubsystem;
+  }
+
+  public ShooterSubsystem getShooterSubsystem() {
+      return shooterSubsystem;
+  }
+
+  public ShooterCommand getShooterCommand() {
+      return shooterCommand;
+  }
+  
+  public ConveyorCommand getConveyorCommand() {
+      return conveyorCommand;
   }
 }

@@ -109,6 +109,8 @@ public class Robot extends TimedRobot {
     m_autonomousCommand.cancel();
     m_teleOpCommand.schedule();
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getConveyorSubsystem(), m_robotContainer.getConveyorCommand());
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getShooterSubsystem(), m_robotContainer.getShooterCommand());
   }
 
   /** This function is called periodically during operator control. */
