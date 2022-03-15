@@ -37,7 +37,10 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutoCommand();
     m_teleOpCommand = m_robotContainer.getTeleOpCommand();
-    
+    SmartDashboard.putBoolean("Shoot?",true);
+    SmartDashboard.putBoolean("Intake?", true);
+    SmartDashboard.putNumber("Delay",0.0);
+    SmartDashboard.putBoolean("team is red", true);
   }
 
   /**

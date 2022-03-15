@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.autonomous.AutoIntakeCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
@@ -77,6 +78,7 @@ public class RobotContainer {
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDrive autonomousIntake = new AutoAlignAndDrive(drivetrainSubsystem);
   private final MoveDistCommand autonomousDrive = new MoveDistCommand(72, 0.5, odometry, drivetrainSubsystem);
+  private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
 
   private Command teleOp;
   private Command autonomous;
@@ -136,7 +138,8 @@ public class RobotContainer {
         ), 
         new ParallelRaceGroup(
           new WaitCommand(2),
-          autonomousIntake
+          autonomousIntake,
+          autoIntake
         )
       );
     }else if(shoot){
@@ -156,7 +159,8 @@ public class RobotContainer {
         ), 
         new ParallelRaceGroup(
           new WaitCommand(2),
-          autonomousIntake
+          autonomousIntake,
+          autoIntake
         )
       );
     }else{
