@@ -14,7 +14,10 @@ public class LEDSubsystem extends SubsystemBase {
   private double blinkin2Pattern = 0.0;
 
   /** Creates a new LEDSubsystem. */
-  public LEDSubsystem() {}
+  public LEDSubsystem() {
+    blinkin1.set(0.73);
+    blinkin2.set(0.73);
+  }
 
   @Override
   public void periodic() {
@@ -25,9 +28,11 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void setBlinkin1Pattern(double blinkin1Pattern) {
       this.blinkin1Pattern = blinkin1Pattern;
+      blinkin1.set(blinkin1Pattern);
   }
 
   public void setBlinkin2Pattern(double blinkin2Pattern) {
       this.blinkin2Pattern = blinkin2Pattern;
+      blinkin2.set(blinkin2Pattern);
   }
 }
