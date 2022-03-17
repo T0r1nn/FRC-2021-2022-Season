@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.autonomous.AutoIntakeCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
@@ -129,10 +128,7 @@ public class RobotContainer {
     return driveCommand;
   }
 
-  public void setAutoCommand() {
-    boolean shoot = SmartDashboard.getBoolean("Shoot?", true);
-    boolean intake = SmartDashboard.getBoolean("Intake?", true);
-    double delay = SmartDashboard.getNumber("delay", 0.0);
+  public void setAutoCommand(boolean shoot, boolean intake, double delay) {
     if(shoot && intake){
       autonomous = new SequentialCommandGroup(
         autonomousShoot,
