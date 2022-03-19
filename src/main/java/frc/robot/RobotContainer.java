@@ -22,6 +22,7 @@ import frc.robot.commands.misc.IdleCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
+import frc.robot.commands.teleOp.SecondaryClimberCommand;
 import frc.robot.commands.teleOp.ClimberCommand;
 import frc.robot.commands.teleOp.ConveyorCommand;
 import frc.robot.commands.teleOp.ShooterCommand;
@@ -29,6 +30,7 @@ import frc.robot.commands.teleOp.ShooterMacro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.SecondaryClimberSystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
@@ -54,6 +56,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+  private final SecondaryClimberSystem secondaryClimberSystem = new SecondaryClimberSystem();
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final LEDSubsystem LEDS = new LEDSubsystem();
@@ -67,6 +70,7 @@ public class RobotContainer {
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
+  private final SecondaryClimberCommand secondaryClimberCommand = new SecondaryClimberCommand(secondaryClimberSystem, climberBalancerGyro, buttonBoard);
   private final ShooterMacro shooterMacro = new ShooterMacro(shooterSubsystem, conveyorSubsystem, buttonBoard);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
@@ -93,7 +97,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand);
+    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, secondaryClimberCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
     LEDS.setBlinkin1Pattern(LEDStyleEnum.LIME.value);
     LEDS.setBlinkin2Pattern(LEDStyleEnum.LIME.value);
