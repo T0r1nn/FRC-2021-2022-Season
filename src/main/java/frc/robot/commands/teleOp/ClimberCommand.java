@@ -5,7 +5,6 @@
 package frc.robot.commands.teleOp;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -13,13 +12,11 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberCommand extends CommandBase {
   private ClimberSubsystem subsystem;
   private Joystick buttonBoard;
-  private ADXRS450_Gyro balanceGyro;
   /** Creates a new ClimberCommand. */
-  public ClimberCommand(ClimberSubsystem subsystemParam, ADXRS450_Gyro balanceGyro, Joystick buttonBoardParam) {
+  public ClimberCommand(ClimberSubsystem subsystemParam, Joystick buttonBoardParam) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystemParam;
     this.buttonBoard = buttonBoardParam;
-    this.balanceGyro = balanceGyro;
     addRequirements(this.subsystem);
   }
 

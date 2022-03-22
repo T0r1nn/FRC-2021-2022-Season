@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.net.PortForwarder;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -55,7 +51,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public OdometryCommand odometry = new OdometryCommand();
+  public OdometryCommand odometry = Constants.odometry;
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
@@ -67,14 +63,13 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   public final Joystick buttonBoard = new Joystick(2);
-  private ADXRS450_Gyro climberBalancerGyro = new ADXRS450_Gyro();
 
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, buttonBoard);
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
-  private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, climberBalancerGyro, buttonBoard);
-  private final SecondaryClimberCommand secondaryClimberCommand = new SecondaryClimberCommand(secondaryClimberSystem, climberBalancerGyro, buttonBoard);
+  private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, buttonBoard);
+  private final SecondaryClimberCommand secondaryClimberCommand = new SecondaryClimberCommand(secondaryClimberSystem, buttonBoard);
   private final ShooterMacro shooterMacro = new ShooterMacro(shooterSubsystem, conveyorSubsystem, buttonBoard);
   private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   private final IdleCommand idle = new IdleCommand(drivetrainSubsystem);
