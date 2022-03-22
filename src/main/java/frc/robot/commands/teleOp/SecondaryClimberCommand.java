@@ -25,16 +25,21 @@ public class SecondaryClimberCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.subsystem.getClimberLeft().getEncoder().setPosition(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double climberSpeed = 0.0;
-    if(this.buttonBoard.getRawButton(6)){
-      climberSpeed = 0.2;
-    }else if(this.buttonBoard.getRawButton(3)){
-      climberSpeed = -0.2;
+    SmartDashboard.putNumber("climber 2 position", this.subsystem.getClimberLeft().getEncoder().getPosition());
+    if(this.buttonBoard.getRawButton(7)){
+      if(this.subsystem.getClimberLeft().getEncoder().getPosition() < 85.5){
+        climberSpeed = 0.6;
+      }
+    }else if(this.buttonBoard.getRawButton(4)){
+      climberSpeed = -0.6;
     }else{
       climberSpeed = 0.0;
     }

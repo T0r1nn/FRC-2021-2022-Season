@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -12,6 +15,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.autonomous.AutoAlignAndDriveAndStop;
 import frc.robot.commands.autonomous.AutoIntakeCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
@@ -59,6 +63,7 @@ public class RobotContainer {
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final LEDSubsystem LEDS = new LEDSubsystem();
+  
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   public final Joystick buttonBoard = new Joystick(2);
@@ -82,8 +87,9 @@ public class RobotContainer {
   private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
-  private final AutoAlignAndDrive autonomousIntake = new AutoAlignAndDrive(drivetrainSubsystem);
-  private final MoveDistCommand autonomousDrive = new MoveDistCommand(72, 0.5, odometry, drivetrainSubsystem);
+  private final AutoAlignAndDriveAndStop autonomousIntake = new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry);
+  private final MoveDistCommand autonomousDrive = new MoveDistCommand(78, 0.5, odometry, drivetrainSubsystem);
+  private final MoveDistCommand autoDropForward = new MoveDistCommand(2, 0.5, odometry, drivetrainSubsystem);
   private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
 
   private Command teleOp;
@@ -140,10 +146,15 @@ public class RobotContainer {
           new WaitCommand(delay),
           idle
         ), 
+        autoDropForward,
+        new WaitCommand(1),
         new ParallelRaceGroup(
-          new WaitCommand(2),
           autonomousIntake,
           autoIntake
+        ),
+        new ParallelRaceGroup(
+          new AutoIntakeCommand(intakeSubsystem),
+          new WaitCommand(2)
         )
       );
     }else if(shoot){
@@ -162,7 +173,6 @@ public class RobotContainer {
           idle
         ), 
         new ParallelRaceGroup(
-          new WaitCommand(2),
           autonomousIntake,
           autoIntake
         )

@@ -28,4 +28,8 @@ public class ClimberSubsystem extends SubsystemBase {
     climberLeft.set(speed);
     climberRight.set(speed);
   }
+
+  public CANSparkMax getClimberLeft() {
+      return climberLeft;
+  }
 }

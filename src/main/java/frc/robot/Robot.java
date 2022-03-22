@@ -28,10 +28,10 @@ public class Robot extends TimedRobot {
   private Command m_teleOpCommand;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private NetworkTableEntry doesShoot = Shuffleboard.getTab("AutoMenu").add("Shoot?",1).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-  private NetworkTableEntry doesIntake = Shuffleboard.getTab("AutoMenu").add("Intake?",1).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-  private NetworkTableEntry delayAmount = Shuffleboard.getTab("AutoMenu").add("Delay",1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",15)).getEntry();
-  private NetworkTableEntry onRedTeam = Shuffleboard.getTab("AutoMenu").add("team is red",1).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+  private NetworkTableEntry doesShoot = Shuffleboard.getTab("AutoMenu").add("Shoot?",1).withWidget(BuiltInWidgets.kTextView).getEntry();
+  private NetworkTableEntry doesIntake = Shuffleboard.getTab("AutoMenu").add("Intake?",1).withWidget(BuiltInWidgets.kTextView).getEntry();
+  private NetworkTableEntry delayAmount = Shuffleboard.getTab("AutoMenu").add("Delay",1).withWidget(BuiltInWidgets.kTextView).withProperties(Map.of("min",0,"max",15)).getEntry();
+  private NetworkTableEntry onRedTeam = Shuffleboard.getTab("AutoMenu").add("team is red",1).withWidget(BuiltInWidgets.kTextView).getEntry();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(doesShoot.getBoolean(true),doesIntake.getBoolean(false),delayAmount.getDouble(0.0));
+      m_robotContainer.setAutoCommand(doesShoot.getBoolean(true),doesIntake.getBoolean(true),delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.schedule();

@@ -25,17 +25,21 @@ public class ClimberCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.subsystem.getClimberLeft().getEncoder().setPosition(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("angle",balanceGyro.getAngle());
+    SmartDashboard.putNumber("climber 1 pos",this.subsystem.getClimberLeft().getEncoder().getPosition());
     double climberSpeed = 0.0;
     if(this.buttonBoard.getRawButton(6)){
-      climberSpeed = 0.2;
+      climberSpeed = 0.6;
     }else if(this.buttonBoard.getRawButton(3)){
-      climberSpeed = -0.2;
+      if(this.subsystem.getClimberLeft().getEncoder().getPosition() > -180){
+        climberSpeed = -0.6;
+      }
     }else{
       climberSpeed = 0.0;
     }
