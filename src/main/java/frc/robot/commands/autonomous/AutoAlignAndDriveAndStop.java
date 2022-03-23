@@ -30,6 +30,7 @@ public class AutoAlignAndDriveAndStop extends CommandBase {
   @Override
   public void execute() {
     odometry.execute(drivetrainSubsystem);
+    
     double Kp = -0.015f;
     double min_command = 0.02f;
     double max_speed = 0.35;
@@ -61,16 +62,22 @@ public class AutoAlignAndDriveAndStop extends CommandBase {
     SmartDashboard.putNumber("tx",tx);
     SmartDashboard.putNumber("turnSpeed", Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command/Math.abs(left_command)));
 
-    drivetrainSubsystem.tankDrive(Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command), Math.copySign(Math.min(Math.abs(right_command),max_speed),right_command));
+    if(Math.sqrt(Math.pow(odometry.x_position,2)+Math.pow(odometry.y_position,2)) > 84){
+      drivetrainSubsystem.tankDrive(0, 0);
+    }else{
+      drivetrainSubsystem.tankDrive(Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command), Math.copySign(Math.min(Math.abs(right_command),max_speed),right_command));
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrainSubsystem.tankDrive(0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.sqrt(Math.pow(odometry.x_position,2)+Math.pow(odometry.y_position,2)) > 120;
+    return Math.sqrt(Math.pow(odometry.x_position,2)+Math.pow(odometry.y_position,2)) > 84;
   }
 }

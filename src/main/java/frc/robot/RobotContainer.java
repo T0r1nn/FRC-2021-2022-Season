@@ -145,7 +145,8 @@ public class RobotContainer {
         new WaitCommand(1),
         new ParallelRaceGroup(
           autonomousIntake,
-          autoIntake
+          autoIntake,
+          new WaitCommand(3)
         ),
         new ParallelRaceGroup(
           new AutoIntakeCommand(intakeSubsystem),
@@ -167,9 +168,16 @@ public class RobotContainer {
           new WaitCommand(delay),
           idle
         ), 
+        autoDropForward,
+        new WaitCommand(1),
         new ParallelRaceGroup(
           autonomousIntake,
-          autoIntake
+          autoIntake,
+          new WaitCommand(3)
+        ),
+        new ParallelRaceGroup(
+          new AutoIntakeCommand(intakeSubsystem),
+          new WaitCommand(2)
         )
       );
     }else{
