@@ -29,9 +29,9 @@ public class IntakeCommand extends CommandBase {
 
     double intakeSpeed = 0.0;
     if(this.buttonBoard.getRawButton(11)){
-      intakeSpeed = 0.75;
+      intakeSpeed = 1;
     }else if(this.buttonBoard.getRawButton(10)){
-      intakeSpeed = -0.75;
+      intakeSpeed = -1;
     }else{
       intakeSpeed = 0.0;
     }

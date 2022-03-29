@@ -34,7 +34,7 @@ public class ClimberCommand extends CommandBase {
     if(this.buttonBoard.getRawButton(6)){
       climberSpeed = 0.6;
     }else if(this.buttonBoard.getRawButton(3)){
-      if(this.subsystem.getClimberLeft().getEncoder().getPosition() > -180){
+      if(this.subsystem.getClimberLeft().getEncoder().getPosition() > -142){
         climberSpeed = -0.6;
       }
     }else{

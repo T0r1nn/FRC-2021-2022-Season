@@ -19,6 +19,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
   TalonFX rightBack = new TalonFX(1);
 
   double inchesPerTick = 0.0092084867;
+  double targetLeftSpeed = 0;
+  double targetRightSpeed = 0;
+  double leftSpeed = 0;
+  double rightSpeed = 0;
+  double maxIncrease = 0.01;
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
@@ -41,8 +46,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
-    rightFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
-    leftFront.set(TalonFXControlMode.PercentOutput, leftSpeed);
+    targetRightSpeed = rightSpeed;
+    targetLeftSpeed = leftSpeed;
   }
 
   public void arcadeDrive(double speed, double turn) {
@@ -86,8 +91,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       rightSpeed /= maxMagnitude;
     }
 
-    rightFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
-    leftFront.set(TalonFXControlMode.PercentOutput, rightSpeed);
+    targetRightSpeed = rightSpeed;
+    targetLeftSpeed = leftSpeed;
   }
 
   public double getLeftDistanceTicks() {
@@ -104,5 +109,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public double getLeftDistanceInch() {
     return getLeftDistanceTicks() * inchesPerTick;
+  }
+
+  @Override
+  public void periodic(){
+    if(Math.abs(leftSpeed-targetLeftSpeed) < maxIncrease){
+      leftSpeed = targetLeftSpeed;
+    }else if(Math.abs(targetLeftSpeed) < 0.5 && Math.abs(leftSpeed) < 0.5){
+      leftSpeed = targetLeftSpeed;
+    }else{
+      leftSpeed += Math.copySign(maxIncrease, targetLeftSpeed);
+    }
+    if(Math.abs(rightSpeed-targetRightSpeed) < maxIncrease){
+      rightSpeed = targetRightSpeed;
+    }else if(Math.abs(targetRightSpeed) < 0.5 && Math.abs(rightSpeed) < 0.5){
+      rightSpeed = targetRightSpeed;
+    }else{
+      rightSpeed += Math.copySign(maxIncrease, targetRightSpeed);
+    }
+    leftFront.set(TalonFXControlMode.PercentOutput,leftSpeed);
+    rightFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
   }
 }

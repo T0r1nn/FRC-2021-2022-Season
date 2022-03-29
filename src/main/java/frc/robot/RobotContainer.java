@@ -22,6 +22,7 @@ import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
 import frc.robot.commands.teleOp.SecondaryClimberCommand;
+import frc.robot.commands.teleOp.SetupClimbers;
 import frc.robot.commands.teleOp.ClimberCommand;
 import frc.robot.commands.teleOp.ConveyorCommand;
 import frc.robot.commands.teleOp.ShooterCommand;
@@ -80,12 +81,14 @@ public class RobotContainer {
   private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
+  private final JoystickButton setupClimberButton = new JoystickButton(buttonBoard, 2);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDriveAndStop autonomousIntake = new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry);
-  private final MoveDistCommand autonomousDrive = new MoveDistCommand(78, 0.5, odometry, drivetrainSubsystem);
+  private final MoveDistCommand autonomousDrive = new MoveDistCommand(86, 0.35, odometry, drivetrainSubsystem);
   private final MoveDistCommand autoDropForward = new MoveDistCommand(2, 0.5, odometry, drivetrainSubsystem);
   private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
+  private final SetupClimbers setupClimbers = new SetupClimbers(climberSubsystem, secondaryClimberSystem);
 
   private Command teleOp;
   private Command autonomous;
@@ -97,7 +100,7 @@ public class RobotContainer {
     // Configure the button bindings
     
     configureButtonBindings();
-    teleOp = new ParallelCommandGroup(intakeCommand, climberCommand, secondaryClimberCommand);
+    teleOp = new ParallelCommandGroup(intakeCommand);
     PortForwarder.add(5800, "photonvision.local", 5800);
     LEDS.setBlinkin1Pattern(LEDStyleEnum.LIME.value);
     LEDS.setBlinkin2Pattern(LEDStyleEnum.LIME.value);
@@ -119,6 +122,7 @@ public class RobotContainer {
     autoAlignButton.whenHeld(autoAlignCommand);
     autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
     shootMacroButton.whenPressed(shooterMacro);
+    setupClimberButton.whenHeld(setupClimbers);
   }
 
   public Command getAutoCommand() {
@@ -203,11 +207,27 @@ public class RobotContainer {
       return shooterSubsystem;
   }
 
+  public ClimberSubsystem getClimberSubsystem() {
+      return climberSubsystem;
+  }
+  
+  public SecondaryClimberSystem getSecondaryClimberSystem() {
+      return secondaryClimberSystem;
+  }
+
   public ShooterCommand getShooterCommand() {
       return shooterCommand;
   }
   
   public ConveyorCommand getConveyorCommand() {
       return conveyorCommand;
+  }
+  
+  public ClimberCommand getClimberCommand() {
+      return climberCommand;
+  }
+
+  public SecondaryClimberCommand getSecondaryClimberCommand() {
+      return secondaryClimberCommand;
   }
 }

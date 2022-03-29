@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(doesShoot.getBoolean(true),doesIntake.getBoolean(true),delayAmount.getDouble(0.0));
+      m_robotContainer.setAutoCommand(true,false,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.schedule();
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(doesShoot.getBoolean(true),doesIntake.getBoolean(false),delayAmount.getDouble(0.0));
+      m_robotContainer.setAutoCommand(true,false,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.cancel();
@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getConveyorSubsystem(), m_robotContainer.getConveyorCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getShooterSubsystem(), m_robotContainer.getShooterCommand());
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getSecondaryClimberSystem(), m_robotContainer.getSecondaryClimberCommand());
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getClimberSubsystem(), m_robotContainer.getClimberCommand());
   }
 
   /** This function is called periodically during operator control. */

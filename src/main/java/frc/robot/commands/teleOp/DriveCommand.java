@@ -33,9 +33,9 @@ public class DriveCommand extends CommandBase {
   public void execute() {
 
     double speedMult = 0.0;
-    speedMult = (-this.leftJoystick.getRawAxis(3)) / 4 + 0.25;
+    speedMult = (-this.leftJoystick.getRawAxis(3)) / 2 + 0.5;
 
-    subsystem.tankDrive(-this.leftJoystick.getRawAxis(1) * speedMult, -this.rightJoystick.getRawAxis(1) * speedMult);
+    subsystem.tankDrive(-this.leftJoystick.getRawAxis(1) * speedMult * 0.65, -this.rightJoystick.getRawAxis(1) * speedMult * 0.65);
 
     odometry.execute(subsystem);
   }

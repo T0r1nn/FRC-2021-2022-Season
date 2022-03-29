@@ -35,12 +35,6 @@ public class ShooterCommand extends CommandBase {
     }else if(this.buttonBoard.getRawAxis(1) < -0.75){
       shooterSpeed -= 0.001;
     }
-    if(this.buttonBoard.getRawButton(2) && !shootButtonPressed){
-      shootButtonPressed = true;
-      shooterToggled = !shooterToggled;
-    }else if(!this.buttonBoard.getRawButton(2)){
-      shootButtonPressed = false;
-    }
     SmartDashboard.putNumber("Shooter Speed",-100*shooterSpeed);
     subsystem.runShooter(shooterToggled?shooterSpeed:0);
   }

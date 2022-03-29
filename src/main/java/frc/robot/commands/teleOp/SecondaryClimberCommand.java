@@ -32,7 +32,7 @@ public class SecondaryClimberCommand extends CommandBase {
     double climberSpeed = 0.0;
     SmartDashboard.putNumber("climber 2 position", this.subsystem.getClimberLeft().getEncoder().getPosition());
     if(this.buttonBoard.getRawButton(7)){
-      if(this.subsystem.getClimberLeft().getEncoder().getPosition() < 85.5){
+      if(this.subsystem.getClimberLeft().getEncoder().getPosition() < 71){
         climberSpeed = 0.6;
       }
     }else if(this.buttonBoard.getRawButton(4)){
