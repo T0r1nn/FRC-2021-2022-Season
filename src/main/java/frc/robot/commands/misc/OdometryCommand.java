@@ -44,4 +44,8 @@ public class OdometryCommand {
         x_position += deltaX;
         y_position += deltaY;
     }
+
+    public double distTo(double x, double y){
+        return Math.sqrt(Math.pow(x_position-x,2)+Math.pow(y_position-y,2));
+    }
 }

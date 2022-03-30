@@ -35,7 +35,6 @@ public class MoveDistCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    odometryCommand.execute(drivetrainSubsystem);
     drivetrainSubsystem.tankDrive(moveSpeed, moveSpeed);
   }
 

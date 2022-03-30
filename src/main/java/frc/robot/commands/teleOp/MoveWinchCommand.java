@@ -28,12 +28,24 @@ public class MoveWinchCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if(leftJoystick.getRawButton(1)){
+      winch.driveWinch(0.4);
+    }else if(rightJoystick.getRawButton(1)){
+      winch.driveWinch(-0.4);
+    }else if(leftJoystick.getRawButton(2)){
+      winch.driveWinch(0.2);
+    }else if(rightJoystick.getRawButton(2)){
+      winch.driveWinch(-0.2);
+    }else{
+      winch.driveWinch(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    winch.driveWinch(0);
+  }
 
   // Returns true when the command should end.
   @Override

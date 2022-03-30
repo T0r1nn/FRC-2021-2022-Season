@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("tx", m_robotContainer.tx.getDouble(0.0));
     SmartDashboard.putNumber("ty", m_robotContainer.ty.getDouble(0.0));
     SmartDashboard.putNumber("ta", m_robotContainer.ta.getDouble(0.0));
+    Constants.odometry.execute(m_robotContainer.getDriveSubsystem());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(true,false,delayAmount.getDouble(0.0));
+      m_robotContainer.setAutoCommand(AutoModeEnum.ONE_BALL,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.schedule();
@@ -107,7 +108,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(true,false,delayAmount.getDouble(0.0));
+      m_robotContainer.setAutoCommand(AutoModeEnum.FOUR_BALL,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.cancel();

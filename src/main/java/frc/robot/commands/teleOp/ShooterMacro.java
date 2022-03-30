@@ -4,7 +4,6 @@
 
 package frc.robot.commands.teleOp;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -13,26 +12,23 @@ public class ShooterMacro extends CommandBase {
   /** Creates a new ShooterMacro. */
   private ShooterSubsystem shooter;
   private ConveyorSubsystem conveyor;
-  private Joystick buttonBoard;
   private int time = 100;
-  public ShooterMacro(ShooterSubsystem shooter, ConveyorSubsystem conveyor, Joystick buttonBoard) {
+  public ShooterMacro(ShooterSubsystem shooter, ConveyorSubsystem conveyor) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.conveyor = conveyor;
-    this.buttonBoard = buttonBoard;
     addRequirements(shooter,conveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.time = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(buttonBoard.getRawButton(5)){
-      this.time = 0;
-    }
     this.time++;
     shooter.runShooter(-0.7);
     if(this.time > 20){

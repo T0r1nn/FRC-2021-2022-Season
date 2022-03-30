@@ -28,9 +28,7 @@ public class AutoAlignAndDriveAndStop extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    odometry.execute(drivetrainSubsystem);
-    
+  public void execute() {    
     double Kp = -0.015f;
     double min_command = 0.02f;
     double max_speed = 0.35;

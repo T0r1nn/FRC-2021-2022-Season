@@ -19,10 +19,6 @@ public class WinchSubsystem extends SubsystemBase {
     winch.set(speed);
   }
 
-  public double getPosition(){
-    return winch.get();
-  }
-
   public void driveTo(double t){
     targeting = true;
     target = t;
