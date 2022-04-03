@@ -13,11 +13,13 @@ public class MoveWinchCommand extends CommandBase {
   WinchSubsystem winch;
   Joystick leftJoystick;
   Joystick rightJoystick;
-  public MoveWinchCommand(WinchSubsystem winchSubsystem, Joystick lefJoystick, Joystick righJoystick) {
+  Joystick buttons;
+  public MoveWinchCommand(WinchSubsystem winchSubsystem, Joystick lefJoystick, Joystick righJoystick, Joystick buttonBoard) {
     // Use addRequirements() here to declare subsystem dependencies.
     winch = winchSubsystem;
     rightJoystick = righJoystick;
     leftJoystick = lefJoystick;
+    buttons = buttonBoard;
     addRequirements(winchSubsystem);
   }
 
@@ -30,7 +32,7 @@ public class MoveWinchCommand extends CommandBase {
   public void execute() {
     if(leftJoystick.getRawButton(1)){
       winch.driveWinch(0.4);
-    }else if(rightJoystick.getRawButton(1)){
+    }else if(rightJoystick.getRawButton(1) || buttons.getRawButton(2)){
       winch.driveWinch(-0.4);
     }else if(leftJoystick.getRawButton(2)){
       winch.driveWinch(0.2);

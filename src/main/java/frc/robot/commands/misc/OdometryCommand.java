@@ -24,7 +24,6 @@ public class OdometryCommand {
         cTime = System.currentTimeMillis();
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
     public void execute(DrivetrainSubsystem drivetrain) {
         pTime = cTime;
         cTime = System.currentTimeMillis();
@@ -41,8 +40,8 @@ public class OdometryCommand {
         double deltaS = (rightInches + leftInches) / 2;
         double deltaX = deltaS * Math.cos(rotation + deltaAngle / 2);
         double deltaY = deltaS * Math.sin(rotation + deltaAngle / 2);
-        x_position += deltaX;
-        y_position += deltaY;
+        x_position -= deltaX;
+        y_position -= deltaY;
     }
 
     public double distTo(double x, double y){

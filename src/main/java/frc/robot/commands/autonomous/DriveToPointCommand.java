@@ -4,9 +4,10 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DriveToPointCommand extends CommandBase {
@@ -14,7 +15,6 @@ public class DriveToPointCommand extends CommandBase {
   private double targetY = 0;
   private double tolerance = 2;
   private DrivetrainSubsystem drivetrain;
-  private boolean reversed = false;
   /** Creates a new DriveToPointCommand. */
   public DriveToPointCommand(DrivetrainSubsystem drSubsystem, double tx, double ty, double tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,15 +22,6 @@ public class DriveToPointCommand extends CommandBase {
     targetY = ty;
     this.tolerance = tolerance;
     drivetrain = drSubsystem;
-    double angle = Math.toDegrees(Math.atan2(ty-Constants.odometry.y_position,tx-Constants.odometry.x_position));
-    if(angle < 0){
-      angle = angle+360;
-    }
-    if(angle > 90 && angle < 270){
-      reversed = true;
-    }else{
-      reversed = false;
-    }
     addRequirements(drSubsystem);
   }
 
@@ -47,10 +38,12 @@ public class DriveToPointCommand extends CommandBase {
   public void execute() {
     double Kp = -0.015f;
     double min_command = 0.02f;
-    double max_speed = 0.4;
+    double max_speed = 1;
+    double speed = 0.4;
 
-    double tx = Math.toDegrees(Math.atan2(targetY-Constants.odometry.y_position,targetX-Constants.odometry.x_position));
-    tx = (Math.toDegrees(Constants.odometry.rotation)+(reversed?180:0))%360 - tx;
+    double tx = 90-Math.toDegrees(Math.atan2(targetY-Constants.odometry.y_position,targetX-Constants.odometry.x_position));
+    tx = (Math.toDegrees(Constants.odometry.rotation))%360 - tx;
+    
     while(tx < 0){
       tx+=360;
     }
@@ -63,10 +56,9 @@ public class DriveToPointCommand extends CommandBase {
       tx = -tx;
     }
 
-
     double left_command = 0.0;
     double right_command = 0.0;
-    double steerWeight = 1-getDriveSpeed(Constants.odometry.distTo(targetX, targetY));
+    double steerWeight = 0.4;
 
     double heading_error = -tx;
     double steering_adjust = 0.0f;
@@ -82,10 +74,11 @@ public class DriveToPointCommand extends CommandBase {
     right_command -= steering_adjust;
     left_command *= steerWeight;
     right_command *= steerWeight;
-    left_command += 1-steerWeight;
-    right_command += 1-steerWeight;
+    left_command += (1-steerWeight);
+    right_command += (1-steerWeight);
+    SmartDashboard.putString("state","DRIVETOPOINT");
 
-    drivetrain.tankDrive(Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command), Math.copySign(Math.min(Math.abs(right_command),max_speed),right_command));
+    drivetrain.tankDrive(speed * Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command), speed * Math.copySign(Math.min(Math.abs(right_command),max_speed),right_command));
   }
 
   // Called once the command ends or is interrupted.

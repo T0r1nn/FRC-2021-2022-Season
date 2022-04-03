@@ -113,21 +113,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Override
   public void periodic(){
-    if(Math.abs(leftSpeed-targetLeftSpeed) < maxIncrease){
-      leftSpeed = targetLeftSpeed;
-    }else if(Math.abs(targetLeftSpeed) < 0.5 && Math.abs(leftSpeed) < 0.5){
-      leftSpeed = targetLeftSpeed;
-    }else{
-      leftSpeed += Math.copySign(maxIncrease, targetLeftSpeed);
-    }
-    if(Math.abs(rightSpeed-targetRightSpeed) < maxIncrease){
-      rightSpeed = targetRightSpeed;
-    }else if(Math.abs(targetRightSpeed) < 0.5 && Math.abs(rightSpeed) < 0.5){
-      rightSpeed = targetRightSpeed;
-    }else{
-      rightSpeed += Math.copySign(maxIncrease, targetRightSpeed);
-    }
-    leftFront.set(TalonFXControlMode.PercentOutput,leftSpeed);
-    rightFront.set(TalonFXControlMode.PercentOutput,rightSpeed);
+    leftFront.set(TalonFXControlMode.PercentOutput,targetLeftSpeed);
+    rightFront.set(TalonFXControlMode.PercentOutput,targetRightSpeed);
   }
 }

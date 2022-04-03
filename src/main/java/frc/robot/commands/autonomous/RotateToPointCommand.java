@@ -4,21 +4,24 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class RotateToAngleCommand extends CommandBase {
+public class RotateToPointCommand extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   double angle = 0;
   double delta = 0;
   /** Creates a new AutoAlignCommand. */
-  public RotateToAngleCommand(DrivetrainSubsystem subsystem, double angle) {
+  public RotateToPointCommand(DrivetrainSubsystem subsystem, double xPos, double yPos) {
     // Use addRequirements() here to declare subsystem dependencies.
     drivetrainSubsystem = subsystem;
     addRequirements(subsystem);
-    this.angle = angle%360;
+    Rotation2d rotation;
+    rotation = Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(yPos-Constants.odometry.y_position,xPos-Constants.odometry.x_position)));
+    this.angle = rotation.getDegrees();
   }
 
   // Called when the command is initially scheduled.

@@ -5,10 +5,11 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class MoveDistCommand extends CommandBase {
+public class MoveOriginCommand extends CommandBase {
   /** Creates a new MoveDistCommand. */
   double targetDistance = 0;
   double moveSpeed = 0;
@@ -17,20 +18,19 @@ public class MoveDistCommand extends CommandBase {
   OdometryCommand odometryCommand;
   DrivetrainSubsystem drivetrainSubsystem;
 
-  public MoveDistCommand(double dist, double speed, OdometryCommand odometry, DrivetrainSubsystem drivetrain) {
+  public MoveOriginCommand(DrivetrainSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    targetDistance = dist;
-    moveSpeed = speed;
-    odometryCommand = odometry;
-    drivetrainSubsystem = drivetrain;
+    startingX = Constants.odometry.x_position;
+    startingY = Constants.odometry.y_position;
+    moveSpeed =  -0.4;
+    targetDistance = Constants.odometry.distTo(0,0);
+    addRequirements(drive);
+    drivetrainSubsystem = drive;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    startingX = odometryCommand.x_position;
-    startingY = odometryCommand.y_position;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

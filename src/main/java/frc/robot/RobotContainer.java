@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.management.relation.RelationException;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -16,6 +18,7 @@ import frc.robot.commands.autonomous.AutoIntakeCommand;
 import frc.robot.commands.autonomous.DriveToPointCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.RotateToAngleCommand;
+import frc.robot.commands.autonomous.RotateToPointCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
@@ -92,7 +95,7 @@ public class RobotContainer {
   private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
   private final SetupClimbers setupClimbers = new SetupClimbers(climberSubsystem, secondaryClimberSystem);
   private final WinchSubsystem winch = new WinchSubsystem();
-  private final MoveWinchCommand winchCommand = new MoveWinchCommand(winch,leftJoystick,rightJoystick);
+  private final MoveWinchCommand winchCommand = new MoveWinchCommand(winch,leftJoystick,rightJoystick,buttonBoard);
 
   private Command teleOp;
   private Command autonomous;
@@ -126,7 +129,6 @@ public class RobotContainer {
     autoAlignButton.whenHeld(autoAlignCommand);
     autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
     shootMacroButton.whenPressed(shooterMacro);
-    setupClimberButton.whenHeld(setupClimbers);
   }
 
   public Command getAutoCommand() {
@@ -153,7 +155,7 @@ public class RobotContainer {
         autonomousShoot,
         new WaitCommand(delay),
         autoDropForward,
-        new WaitCommand(0.2),
+        new WaitCommand(3),
         new ParallelRaceGroup(
           autonomousIntake,
           autoIntake,
@@ -161,18 +163,23 @@ public class RobotContainer {
         ),
         new ParallelRaceGroup(
           new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(1)
+          new WaitCommand(1.5)
         ),
-        new DriveToPointCommand(drivetrainSubsystem, 0, 0, 2),
-        new RotateToAngleCommand(drivetrainSubsystem, 0),
-        new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem),
-        autonomousDrive
+        // new ParallelRaceGroup(
+        //   new RotateToAngleCommand(drivetrainSubsystem, 0),
+        //   new WaitCommand(2)
+        // ),
+        new ParallelRaceGroup(
+          new MoveDistCommand(86, -0.35, odometry, drivetrainSubsystem),
+          new WaitCommand(4)
+        ),
+        new ShooterMacro(shooterSubsystem, conveyorSubsystem)
       );
     }else if(mode == AutoModeEnum.FOUR_BALL){
       autonomous = new SequentialCommandGroup(
         new WaitCommand(delay),
         autoDropForward,
-        new WaitCommand(0.2),
+        new WaitCommand(3),
         new ParallelRaceGroup(
           autonomousIntake,
           autoIntake,

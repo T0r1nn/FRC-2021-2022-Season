@@ -28,9 +28,8 @@ public class Robot extends TimedRobot {
   private Command m_teleOpCommand;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private NetworkTableEntry doesShoot = Shuffleboard.getTab("AutoMenu").add("Shoot?",1).withWidget(BuiltInWidgets.kTextView).getEntry();
-  private NetworkTableEntry doesIntake = Shuffleboard.getTab("AutoMenu").add("Intake?",1).withWidget(BuiltInWidgets.kTextView).getEntry();
-  private NetworkTableEntry delayAmount = Shuffleboard.getTab("AutoMenu").add("Delay",1).withWidget(BuiltInWidgets.kTextView).withProperties(Map.of("min",0,"max",15)).getEntry();
+  private NetworkTableEntry autoMode = Shuffleboard.getTab("AutoMenu").add("Auto Mode",1).withWidget(BuiltInWidgets.kTextView).getEntry();
+  private NetworkTableEntry delayAmount = Shuffleboard.getTab("AutoMenu").add("Delay",1).withWidget(BuiltInWidgets.kTextView).getEntry();
   private NetworkTableEntry onRedTeam = Shuffleboard.getTab("AutoMenu").add("team is red",1).withWidget(BuiltInWidgets.kTextView).getEntry();
 
   /**
@@ -91,7 +90,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(AutoModeEnum.ONE_BALL,delayAmount.getDouble(0.0));
+      AutoModeEnum mode = AutoModeEnum.ONE_BALL;
+      if(autoMode.getDouble(0.0) == 0.0){
+        mode = AutoModeEnum.ONE_BALL;
+      }
+      if(autoMode.getDouble(0.0) == 1.0){
+        mode = AutoModeEnum.TWO_BALL;
+      }
+      if(autoMode.getDouble(0.0) == 2.0){
+        mode = AutoModeEnum.FOUR_BALL;
+      }
+      m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.schedule();
@@ -108,7 +117,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(m_autonomousCommand == null){
-      m_robotContainer.setAutoCommand(AutoModeEnum.FOUR_BALL,delayAmount.getDouble(0.0));
+      AutoModeEnum mode = AutoModeEnum.ONE_BALL;
+      if(autoMode.getDouble(0.0) == 0.0){
+        mode = AutoModeEnum.ONE_BALL;
+      }
+      if(autoMode.getDouble(0.0) == 1.0){
+        mode = AutoModeEnum.TWO_BALL;
+      }
+      if(autoMode.getDouble(0.0) == 2.0){
+        mode = AutoModeEnum.FOUR_BALL;
+      }
+      m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
     m_autonomousCommand.cancel();
