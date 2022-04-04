@@ -7,13 +7,13 @@ package frc.robot.commands.teleOp;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends CommandBase {
 
   private ShooterSubsystem subsystem;
   private Joystick buttonBoard;
-  double shooterSpeed = -0.6;
   boolean shootButtonPressed = false;
   boolean shooterToggled = false;
 
@@ -31,12 +31,12 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void execute() {
     if(this.buttonBoard.getRawAxis(0) < -0.75){
-      shooterSpeed += 0.001;
+      Constants.shooterSpeed += 0.001;
     }else if(this.buttonBoard.getRawAxis(1) < -0.75){
-      shooterSpeed -= 0.001;
+      Constants.shooterSpeed -= 0.001;
     }
-    SmartDashboard.putNumber("Shooter Speed",-100*shooterSpeed);
-    subsystem.runShooter(shooterToggled?shooterSpeed:0);
+    SmartDashboard.putNumber("Shooter Speed",-100*Constants.shooterSpeed);
+    subsystem.runShooter(shooterToggled?Constants.shooterSpeed:0);
   }
 
   // Called once the command ends or is interrupted.

@@ -16,4 +16,5 @@ import frc.robot.commands.misc.OdometryCommand;
  */
 public final class Constants {
     public static OdometryCommand odometry = new OdometryCommand();
+    public static double shooterSpeed = -0.7;
 }

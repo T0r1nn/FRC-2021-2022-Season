@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import javax.management.relation.RelationException;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,7 +16,6 @@ import frc.robot.commands.autonomous.AutoIntakeCommand;
 import frc.robot.commands.autonomous.DriveToPointCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.RotateToAngleCommand;
-import frc.robot.commands.autonomous.RotateToPointCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
@@ -27,7 +24,6 @@ import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
 import frc.robot.commands.teleOp.MoveWinchCommand;
 import frc.robot.commands.teleOp.SecondaryClimberCommand;
-import frc.robot.commands.teleOp.SetupClimbers;
 import frc.robot.commands.teleOp.ClimberCommand;
 import frc.robot.commands.teleOp.ConveyorCommand;
 import frc.robot.commands.teleOp.ShooterCommand;
@@ -86,14 +82,12 @@ public class RobotContainer {
   private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
-  private final JoystickButton setupClimberButton = new JoystickButton(buttonBoard, 2);
   private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDriveAndStop autonomousIntake = new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry);
   private final MoveDistCommand autonomousDrive = new MoveDistCommand(86, 0.35, odometry, drivetrainSubsystem);
   private final MoveDistCommand autoDropForward = new MoveDistCommand(2, 0.5, odometry, drivetrainSubsystem);
   private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
-  private final SetupClimbers setupClimbers = new SetupClimbers(climberSubsystem, secondaryClimberSystem);
   private final WinchSubsystem winch = new WinchSubsystem();
   private final MoveWinchCommand winchCommand = new MoveWinchCommand(winch,leftJoystick,rightJoystick,buttonBoard);
 
