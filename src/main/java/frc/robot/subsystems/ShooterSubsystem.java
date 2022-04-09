@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  WPI_TalonFX shooter = new WPI_TalonFX(0);
+  WPI_TalonFX shooter = new WPI_TalonFX(11);
   /** Creates a new IntakeSubsystem. */
   public ShooterSubsystem() {}
 

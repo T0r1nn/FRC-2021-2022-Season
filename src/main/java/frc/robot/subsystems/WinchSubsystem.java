@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class WinchSubsystem extends SubsystemBase {
   /** Creates a new WinchSubsystem. */
-  CANSparkMax winch = new CANSparkMax(4, MotorType.kBrushless);
+  CANSparkMax winch = new CANSparkMax(12, MotorType.kBrushless);
   boolean targeting = false;
   double target = 0;
 

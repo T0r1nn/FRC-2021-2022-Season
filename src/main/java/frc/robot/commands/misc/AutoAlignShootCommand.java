@@ -30,7 +30,7 @@ public class AutoAlignShootCommand extends CommandBase {
     double min_command = 0.05f;
     double max_speed = 0.4;
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-shoot");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
     double tx = table.getEntry("tx").getDouble(0.0);
 
     double left_command = 0.0;

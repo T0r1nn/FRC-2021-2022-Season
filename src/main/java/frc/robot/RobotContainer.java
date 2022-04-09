@@ -19,6 +19,7 @@ import frc.robot.commands.autonomous.RotateToAngleCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
 import frc.robot.commands.misc.AutoAlignCommand;
+import frc.robot.commands.misc.AutoAlignShootCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.teleOp.DriveCommand;
 import frc.robot.commands.teleOp.IntakeCommand;
@@ -82,7 +83,7 @@ public class RobotContainer {
   private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
-  private final AutoAlignCommand autoAlignCommand = new AutoAlignCommand(drivetrainSubsystem);
+  private final AutoAlignShootCommand autoAlignCommand = new AutoAlignShootCommand(drivetrainSubsystem);
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
   private final AutoAlignAndDriveAndStop autonomousIntake = new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry);
   private final MoveDistCommand autonomousDrive = new MoveDistCommand(86, 0.35, odometry, drivetrainSubsystem);
@@ -140,68 +141,15 @@ public class RobotContainer {
   public void setAutoCommand(AutoModeEnum mode, double delay) {
     if(mode == AutoModeEnum.ONE_BALL){
       autonomous = new SequentialCommandGroup(
-        autonomousShoot,
-        new WaitCommand(delay),
-        autonomousDrive
+        new RotateToAngleCommand(drivetrainSubsystem, 45)
       );
     }else if(mode == AutoModeEnum.TWO_BALL){
       autonomous = new SequentialCommandGroup(
-        autonomousShoot,
-        new WaitCommand(delay),
-        autoDropForward,
-        new WaitCommand(3),
-        new ParallelRaceGroup(
-          autonomousIntake,
-          autoIntake,
-          new WaitCommand(3)
-        ),
-        new ParallelRaceGroup(
-          new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(1.5)
-        ),
-        // new ParallelRaceGroup(
-        //   new RotateToAngleCommand(drivetrainSubsystem, 0),
-        //   new WaitCommand(2)
-        // ),
-        new ParallelRaceGroup(
-          new MoveDistCommand(86, -0.35, odometry, drivetrainSubsystem),
-          new WaitCommand(4)
-        ),
-        new ShooterMacro(shooterSubsystem, conveyorSubsystem)
+        new RotateToAngleCommand(drivetrainSubsystem, 45)
       );
     }else if(mode == AutoModeEnum.FOUR_BALL){
       autonomous = new SequentialCommandGroup(
-        new WaitCommand(delay),
-        autoDropForward,
-        new WaitCommand(3),
-        new ParallelRaceGroup(
-          autonomousIntake,
-          autoIntake,
-          new WaitCommand(3)
-        ),
-        new ParallelRaceGroup(
-          new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(1)
-        ),
-        new DriveToPointCommand(drivetrainSubsystem, 0, 0, 2),
-        new RotateToAngleCommand(drivetrainSubsystem, 0),
-        new ShooterMacro(shooterSubsystem, conveyorSubsystem),
-        new MoveDistCommand(12, 0.8, odometry, drivetrainSubsystem),
-        new RotateToAngleCommand(drivetrainSubsystem, -30),
-        new ParallelRaceGroup(
-          new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry),
-          new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(3)
-        ),
-        new ParallelRaceGroup(
-          new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(1)
-        ),
-        new DriveToPointCommand(drivetrainSubsystem, 0, 12, 2),
-        new RotateToAngleCommand(drivetrainSubsystem, 0),
-        new DriveToPointCommand(drivetrainSubsystem, 0, 0, 2),
-        new ShooterMacro(shooterSubsystem, conveyorSubsystem),
-        autonomousDrive
+        new RotateToAngleCommand(drivetrainSubsystem, 45)
       );
     }
   }

@@ -12,7 +12,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class RotateToAngleCommand extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   double angle = 0;
-  double delta = 0;
+  double delta = 2;
   /** Creates a new AutoAlignCommand. */
   public RotateToAngleCommand(DrivetrainSubsystem subsystem, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,39 +28,20 @@ public class RotateToAngleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double curtheta = Constants.odometry.rotation % (Math.PI*2);
-    curtheta = Math.toDegrees(curtheta);
-    while(curtheta < 0){
-      curtheta += 360;
-    }
-    while(curtheta > 360){
-      curtheta -= 360;
-    }
-    double leftRotDist = angle-curtheta;
-    while(leftRotDist < 0){
-      leftRotDist += 360;
-    }
-    double rightRotDist = 360-leftRotDist;
-    delta = 0;
-    if(Math.abs(leftRotDist) < Math.abs(rightRotDist)){
-      delta = leftRotDist;
-    }else{
-      delta = -rightRotDist;
-    }
-
-    double heading_error = -delta;
+    double heading_error = (angle-Math.toDegrees(Constants.odometry.rotation));
+    delta = heading_error;
     double steering_adjust = 0;
     double Kp = -0.015;
-    double min_command = 0.1;
+    double min_command = 0.2;
     double left_command = 0;
     double right_command = 0;
-    double max_speed = 0.6;
+    double max_speed = 0.3;
 
     if (delta > 1.0)
     {
       steering_adjust = Kp*heading_error - min_command;
     }
-    else if (delta < 1.0)
+    else if (delta < -1.0)
     {
       steering_adjust = Kp*heading_error + min_command;
     }
@@ -68,7 +49,7 @@ public class RotateToAngleCommand extends CommandBase {
     right_command -= steering_adjust;
     SmartDashboard.putString("state","ROTATETOANGLE");
 
-    drivetrainSubsystem.tankDrive(Math.copySign(Math.min(Math.abs(left_command),max_speed),left_command), Math.copySign(Math.min(Math.abs(right_command),max_speed),right_command));
+    drivetrainSubsystem.tankDrive(max_speed*Math.copySign(Math.min(Math.abs(left_command),1),left_command), max_speed*Math.copySign(Math.min(Math.abs(right_command),1),right_command));
   }
 
   // Called once the command ends or is interrupted.
