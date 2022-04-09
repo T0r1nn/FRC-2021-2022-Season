@@ -5,12 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  CANSparkMax shooter = new CANSparkMax(6, MotorType.kBrushed);
+  WPI_TalonFX shooter = new WPI_TalonFX(0);
   /** Creates a new IntakeSubsystem. */
   public ShooterSubsystem() {}
 
@@ -20,6 +21,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void runShooter(double speed){
-    shooter.set(speed);
+    shooter.set(TalonFXControlMode.PercentOutput, speed);
   }
 }

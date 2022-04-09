@@ -5,6 +5,7 @@
 package frc.robot.commands.teleOp;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WinchSubsystem;
 
@@ -30,14 +31,15 @@ public class MoveWinchCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("winch pos", winch.getMotor().getEncoder().getPosition());
     if(leftJoystick.getRawButton(1)){
-      winch.driveWinch(0.4);
+      winch.driveWinch(0.1);
     }else if(rightJoystick.getRawButton(1) || buttons.getRawButton(2)){
-      winch.driveWinch(-0.4);
+      winch.driveWinch(-0.1);
     }else if(leftJoystick.getRawButton(2)){
-      winch.driveWinch(0.2);
+      winch.driveWinch(0.05);
     }else if(rightJoystick.getRawButton(2)){
-      winch.driveWinch(-0.2);
+      winch.driveWinch(-0.05);
     }else{
       winch.driveWinch(0);
     }

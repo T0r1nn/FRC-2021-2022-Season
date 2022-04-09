@@ -4,16 +4,21 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class WinchSubsystem extends SubsystemBase {
   /** Creates a new WinchSubsystem. */
-  Spark winch = new Spark(4);
+  CANSparkMax winch = new CANSparkMax(4, MotorType.kBrushless);
   boolean targeting = false;
   double target = 0;
 
-  public WinchSubsystem() {}
+  public WinchSubsystem() {
+    winch.setIdleMode(IdleMode.kBrake);
+  }
 
   public void driveWinch(double speed){
     winch.set(speed);
@@ -31,10 +36,14 @@ public class WinchSubsystem extends SubsystemBase {
       if(Math.abs(winch.get()-target) < 1){
         targeting = false;
       }else if(target > winch.get()){
-        winch.set(0.5);
+        winch.set(0.1);
       }else if(target < winch.get()){
-        winch.set(-0.5);
+        winch.set(-0.1);
       }
     }
+  }
+
+  public CANSparkMax getMotor(){
+    return winch;
   }
 }
