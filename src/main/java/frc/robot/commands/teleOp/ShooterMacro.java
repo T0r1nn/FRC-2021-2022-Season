@@ -51,7 +51,7 @@ public class ShooterMacro extends CommandBase {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-shoot");
     double tx = table.getEntry("ty").getDouble(0.0);
     double totalAngle = tx+limelightAngle;
-    return (reflectiveTapeHeight-limelightHeight)/Math.tan(totalAngle);
+    return (reflectiveTapeHeight-limelightHeight)/Math.tan(Math.toRadians(totalAngle));
   }
 
   public double calcSpeed(){
