@@ -240,7 +240,10 @@ public class RobotContainer {
         new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem),
         autoDropForward,
         new MoveDistCommand(10, 0.35, odometry, drivetrainSubsystem),
-        new RotateToAngleCommand(drivetrainSubsystem, -50),
+        new ParallelRaceGroup(
+          new RotateToAngleCommand(drivetrainSubsystem, -50),
+          new WaitCommand(0.5)
+        ),
         new ParallelRaceGroup(
           new AutoAlignAndDriveAndStop(drivetrainSubsystem, odometry),
           new WaitCommand(3),
@@ -248,7 +251,8 @@ public class RobotContainer {
         ),
         new ParallelRaceGroup(
           new RotateToAngleCommand(drivetrainSubsystem, -80),
-          new AutoIntakeCommand(intakeSubsystem)
+          new AutoIntakeCommand(intakeSubsystem),
+          new WaitCommand(0.5)
         ),
         new ParallelRaceGroup(
           new MoveDistCommand(80, 0.35, odometry, drivetrainSubsystem),
@@ -263,16 +267,17 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new RotateToAngleCommand(drivetrainSubsystem, -100),
           new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(2)
+          new WaitCommand(0.5)
         ),
         new ParallelRaceGroup(
           new MoveDistCommand(220, -0.35, odometry, drivetrainSubsystem),
-          new AutoIntakeCommand(intakeSubsystem)
+          new AutoIntakeCommand(intakeSubsystem),
+          new WaitCommand(0.5)
         ),
         new ParallelRaceGroup(
           new RotateToAngleCommand(drivetrainSubsystem, 0),
           new AutoIntakeCommand(intakeSubsystem),
-          new WaitCommand(1)
+          new WaitCommand(0.75)
         ),
         new ParallelRaceGroup(
           new AutoAlignShootCommand(drivetrainSubsystem),
