@@ -33,13 +33,13 @@ public class MoveWinchCommand extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("winch pos", winch.getMotor().getEncoder().getPosition());
     if(leftJoystick.getRawButton(1)){
-      winch.driveWinch(0.6);
+      winch.driveWinch(1);
     }else if(rightJoystick.getRawButton(1) || buttons.getRawButton(2)){
-      winch.driveWinch(-0.6);
+      winch.driveWinch(-1);
     }else if(leftJoystick.getRawButton(2)){
-      winch.driveWinch(0.2);
+      winch.driveWinch(0.3);
     }else if(rightJoystick.getRawButton(2)){
-      winch.driveWinch(-0.2);
+      winch.driveWinch(-0.3);
     }else{
       winch.driveWinch(0);
     }

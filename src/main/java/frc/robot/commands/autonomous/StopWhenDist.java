@@ -5,14 +5,14 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Constants;
 
-public class AutoIntakeCommand extends CommandBase {
-  /** Creates a new AutoIntakeCommand. */
-  private IntakeSubsystem intake;
-  public AutoIntakeCommand(IntakeSubsystem intake) {
+public class StopWhenDist extends CommandBase {
+  /** Creates a new StopWhenDist. */
+  private double dist;
+  public StopWhenDist(double d) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    dist = d;
   }
 
   // Called when the command is initially scheduled.
@@ -21,19 +21,15 @@ public class AutoIntakeCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    intake.runIntake(0.85);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.runIntake(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Constants.odometry.distTo(0, 0) > dist;
   }
 }

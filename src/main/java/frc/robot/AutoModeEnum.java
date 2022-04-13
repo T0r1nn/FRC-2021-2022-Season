@@ -8,5 +8,6 @@ package frc.robot;
 public enum AutoModeEnum {
     ONE_BALL,
     TWO_BALL,
-    FOUR_BALL
+    DEFENSE,
+    THREE_BALL
 }

@@ -39,7 +39,7 @@ public class ShooterMacro extends CommandBase {
     this.time++;
     shooter.runShooter(Constants.shooterSpeed);
     if(this.time > 20){
-      conveyor.runConveyor(-0.75);
+      conveyor.runConveyor(-0.65);
     }
     SmartDashboard.putNumber("Distance to target", calcDistance());
   }
@@ -79,6 +79,6 @@ public class ShooterMacro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return time > 55;
+    return time > 75;
   }
 }

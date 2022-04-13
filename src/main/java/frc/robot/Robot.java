@@ -96,7 +96,10 @@ public class Robot extends TimedRobot {
         mode = AutoModeEnum.TWO_BALL;
       }
       if(autoMode.getDouble(0.0) == 2.0){
-        mode = AutoModeEnum.FOUR_BALL;
+        mode = AutoModeEnum.DEFENSE;
+      }
+      if(autoMode.getDouble(0.0) == 3.0){
+        mode = AutoModeEnum.THREE_BALL;
       }
       m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
@@ -123,7 +126,10 @@ public class Robot extends TimedRobot {
         mode = AutoModeEnum.TWO_BALL;
       }
       if(autoMode.getDouble(0.0) == 2.0){
-        mode = AutoModeEnum.FOUR_BALL;
+        mode = AutoModeEnum.DEFENSE;
+      }
+      if(autoMode.getDouble(0.0) == 3.0){
+        mode = AutoModeEnum.THREE_BALL;
       }
       m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();

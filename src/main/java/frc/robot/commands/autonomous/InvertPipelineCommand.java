@@ -4,36 +4,36 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.RobotContainer;
 
-public class AutoIntakeCommand extends CommandBase {
-  /** Creates a new AutoIntakeCommand. */
-  private IntakeSubsystem intake;
-  public AutoIntakeCommand(IntakeSubsystem intake) {
+public class InvertPipelineCommand extends CommandBase {
+  /** Creates a new InvertPipelineCommand. */
+  double pipeline = 0;
+  public InvertPipelineCommand(double pipeline) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    this.pipeline = pipeline;
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    NetworkTableInstance.getDefault().getTable("limelight-fphil").getEntry("pipeline").setDouble(pipeline == 0?1:0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    intake.runIntake(0.85);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.runIntake(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
