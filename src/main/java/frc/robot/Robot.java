@@ -25,7 +25,9 @@ public class Robot extends TimedRobot {
   //private Command m_autonomousCommand;
   private Command m_teleOpCommand;
   private Command m_autonomousCommand;
+  private Command m_testCommand;
   private RobotContainer m_robotContainer;
+  //Settings for autonomous
   private NetworkTableEntry autoMode = Shuffleboard.getTab("AutoMenu").add("Auto Mode",1).withWidget(BuiltInWidgets.kTextView).getEntry();
   private NetworkTableEntry delayAmount = Shuffleboard.getTab("AutoMenu").add("Delay",1).withWidget(BuiltInWidgets.kTextView).getEntry();
   private NetworkTableEntry onRedTeam = Shuffleboard.getTab("AutoMenu").add("team is red",1).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -37,12 +39,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
+    //Gets commands from the robot container.
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutoCommand();
     m_teleOpCommand = m_robotContainer.getTeleOpCommand();
+    m_testCommand = m_robotContainer.getRotateCommand();
   }
 
   /**
@@ -65,10 +66,13 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+    //Runs commands
     CommandScheduler.getInstance().run();
+    //Puts limelight debug info to shuffleboard
     SmartDashboard.putNumber("tx", m_robotContainer.tx.getDouble(0.0));
     SmartDashboard.putNumber("ty", m_robotContainer.ty.getDouble(0.0));
     SmartDashboard.putNumber("ta", m_robotContainer.ta.getDouble(0.0));
+    //Runs odometry
     Constants.odometry.execute(m_robotContainer.getDriveSubsystem());
   }
 
@@ -87,6 +91,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //If there isn't an autonomous command, create one.
     if(m_autonomousCommand == null){
       AutoModeEnum mode = AutoModeEnum.ONE_BALL;
       if(autoMode.getDouble(0.0) == 0.0){
@@ -104,8 +109,10 @@ public class Robot extends TimedRobot {
       m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
+    //Sets the commands
     m_autonomousCommand.schedule();
     m_teleOpCommand.cancel();
+    //Gets the team and sends it to the limelight for cargo detection
     double team = onRedTeam.getDouble(1.0);
     m_robotContainer.table.getEntry("pipeline").setDouble(team == 1.0 ? 0 : 1);
   }
@@ -117,6 +124,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //If auto command doesn't exist, create it
     if(m_autonomousCommand == null){
       AutoModeEnum mode = AutoModeEnum.ONE_BALL;
       if(autoMode.getDouble(0.0) == 0.0){
@@ -134,13 +142,16 @@ public class Robot extends TimedRobot {
       m_robotContainer.setAutoCommand(mode,delayAmount.getDouble(0.0));
       m_autonomousCommand = m_robotContainer.getAutoCommand();
     }
+    //Schedule commands
     m_autonomousCommand.cancel();
     m_teleOpCommand.schedule();
+    //Set default commands for subsystems
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getConveyorSubsystem(), m_robotContainer.getConveyorCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getShooterSubsystem(), m_robotContainer.getShooterCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getSecondaryClimberSystem(), m_robotContainer.getSecondaryClimberCommand());
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getClimberSubsystem(), m_robotContainer.getClimberCommand());
+    m_testCommand.schedule();
   }
 
   /** This function is called periodically during operator control. */
@@ -152,6 +163,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().schedule(m_testCommand);
   }
 
   /** This function is called periodically during test mode. */
@@ -161,6 +173,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public boolean isDisabled(){
+    //My failed attempt at a kill switch
     return !m_robotContainer.buttonBoard.getRawButton(12);
   }
 }
