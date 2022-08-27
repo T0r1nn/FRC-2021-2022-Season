@@ -30,6 +30,6 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public CANSparkMax getClimberLeft() {
-      return climberLeft;
+    return climberLeft;
   }
 }

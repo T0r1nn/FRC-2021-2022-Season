@@ -2,17 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.autonomous;
+package frc.robot.commands.jjSummerBash;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutoIntakeCommand extends CommandBase {
-  /** Creates a new AutoIntakeCommand. */
-  private IntakeSubsystem intake;
-  public AutoIntakeCommand(IntakeSubsystem intake) {
+public class FullShootCommand extends CommandBase {
+  /** Creates a new ShootCommand. */
+  IntakeSubsystem intake;
+  ConveyorSubsystem conveyor;
+  ShooterSubsystem shooter;
+  public FullShootCommand(IntakeSubsystem intakeSubsystem, ConveyorSubsystem conveyorSubsystem, ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    intake = intakeSubsystem;
+    conveyor = conveyorSubsystem;
+    shooter = shooterSubsystem;
+    addRequirements(intakeSubsystem, conveyorSubsystem, shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -22,14 +29,15 @@ public class AutoIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //Spins the intake until the command is forcibly stopped
-    intake.runIntake(0.85);
+    conveyor.runConveyor(-0.75);
+    shooter.runShooter(-0.7);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.runIntake(0);
+    conveyor.runConveyor(0);
+    shooter.runShooter(0);
   }
 
   // Returns true when the command should end.

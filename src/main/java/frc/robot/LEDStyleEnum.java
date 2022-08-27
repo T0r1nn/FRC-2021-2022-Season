@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-/** Add your docs here. */
+//An enum for coloring the LEDS
 enum LEDStyleEnum {
     HOTPINK(0.57),
     DARKRED(0.59),
