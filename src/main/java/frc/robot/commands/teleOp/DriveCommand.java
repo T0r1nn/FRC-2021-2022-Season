@@ -35,7 +35,7 @@ public class DriveCommand extends CommandBase {
     double speedMult = 0.0;
     speedMult = (-this.leftJoystick.getRawAxis(3)) / 2 + 0.5;
 
-    subsystem.tankDrive(-this.leftJoystick.getRawAxis(1) * speedMult * 0.4, -this.rightJoystick.getRawAxis(1) * speedMult * 0.4);
+    subsystem.tankDrive(-this.leftJoystick.getRawAxis(1) * speedMult * 0.65, -this.rightJoystick.getRawAxis(1) * speedMult * 0.65);
   }
 
   // Called once the command ends or is interrupted.

@@ -22,7 +22,6 @@ public class AutoIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //Spins the intake until the command is forcibly stopped
     intake.runIntake(0.85);
   }
 

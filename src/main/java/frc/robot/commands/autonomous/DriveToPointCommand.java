@@ -17,7 +17,6 @@ public class DriveToPointCommand extends CommandBase {
   /** Creates a new DriveToPointCommand. */
   public DriveToPointCommand(DrivetrainSubsystem drSubsystem, double tx, double ty, double tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //Sets target position and how far off of the position the robot tries to be.
     targetX = tx;
     targetY = ty;
     this.tolerance = tolerance;
@@ -29,7 +28,6 @@ public class DriveToPointCommand extends CommandBase {
   @Override
   public void initialize() {}
 
-  //Gets how fast the robot should drive at a certain distance from the target.
   public double getDriveSpeed(double dist){
     return -1/(0.1*dist + 1.5) + 1;
   }

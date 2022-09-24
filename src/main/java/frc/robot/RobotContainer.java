@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.naming.PartialResultException;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -13,16 +15,15 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.autonomous.AutoAlignAndDriveAndStop;
 import frc.robot.commands.autonomous.AutoIntakeCommand;
+import frc.robot.commands.autonomous.DriveToPointCommand;
 import frc.robot.commands.autonomous.InvertPipelineCommand;
 import frc.robot.commands.autonomous.MoveDistCommand;
 import frc.robot.commands.autonomous.RotateByAngleCommand;
 import frc.robot.commands.autonomous.RotateToAngleCommand;
 import frc.robot.commands.autonomous.ShootOneBallCommand;
 import frc.robot.commands.autonomous.StopWhenDist;
-import frc.robot.commands.jjSummerBash.RotateCommand;
-import frc.robot.commands.jjSummerBash.RunIntakeCommand;
-import frc.robot.commands.jjSummerBash.FullShootCommand;
 import frc.robot.commands.misc.AutoAlignAndDrive;
+import frc.robot.commands.misc.AutoAlignCommand;
 import frc.robot.commands.misc.AutoAlignShootCommand;
 import frc.robot.commands.misc.OdometryCommand;
 import frc.robot.commands.teleOp.DriveCommand;
@@ -59,70 +60,43 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  //Gets the odometry system
   public OdometryCommand odometry = Constants.odometry;
-  
-  //A subsystem to control the drivetrain
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-  //A subsystem to control the intake
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  //A subsystem to control the primary climber
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-  //A subsystem to control the secondary climber
   private final SecondaryClimberSystem secondaryClimberSystem = new SecondaryClimberSystem();
-  //A subsystem to control the conveyor
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
-  //A subsystem to control the shooter
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  //A subsystem to control the LEDS
   private final LEDSubsystem LEDS = new LEDSubsystem();
   
-  //Defining the three peripherals
   private final Joystick leftJoystick = new Joystick(0);
   private final Joystick rightJoystick = new Joystick(1);
   public final Joystick buttonBoard = new Joystick(2);
 
-  //A command to drive the robot in teleop
   private final DriveCommand driveCommand = new DriveCommand(drivetrainSubsystem, leftJoystick, rightJoystick);
-  //A command to intake during teleop
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, buttonBoard);
-  //A command to run the conveyor in teleop
   private final ConveyorCommand conveyorCommand = new ConveyorCommand(conveyorSubsystem, buttonBoard);
-  //A command to run the shooter in teleop
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, buttonBoard);
-  //Two commands to run the climbers in teleop
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem, buttonBoard);
   private final SecondaryClimberCommand secondaryClimberCommand = new SecondaryClimberCommand(secondaryClimberSystem, buttonBoard);
-  //A command to run the conveyor and shooter for enough time to shoot two cargo
   private final ShooterMacro shooterMacro = new ShooterMacro(shooterSubsystem, conveyorSubsystem);
-  //The way the limelight is accessed
+  private final ShootOneBallCommand autonomousShoot = new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem);
   public final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-fphil");
-  //The limelight data
   public final NetworkTableEntry tx = table.getEntry("tx");
   public final NetworkTableEntry ty = table.getEntry("ty");
   public final NetworkTableEntry ta = table.getEntry("ta");
-  //Joystick buttons to run macros
   private final JoystickButton autoAlignButton = new JoystickButton(leftJoystick, 6);
   private final JoystickButton autoAlignAndDriveButton = new JoystickButton(rightJoystick, 5);
   private final JoystickButton shootMacroButton = new JoystickButton(buttonBoard, 5);
-  //A command to align to the upper hub during auto
   private final AutoAlignShootCommand autoAlignCommand = new AutoAlignShootCommand(drivetrainSubsystem);
-  //Chases a cargo
   private final AutoAlignAndDrive autoAlignAndDrive = new AutoAlignAndDrive(drivetrainSubsystem);
-  //Moves a certain distance, first one for taxiing and second one for dropping the intake
+  private final AutoAlignAndDriveAndStop autonomousIntake = new AutoAlignAndDriveAndStop(drivetrainSubsystem,odometry);
   private final MoveDistCommand autonomousDrive = new MoveDistCommand(86, 0.35, odometry, drivetrainSubsystem);
   private final MoveDistCommand autoDropForward = new MoveDistCommand(2, 0.35, odometry, drivetrainSubsystem);
-  //The subsystem and command to control the winch during teleop
+  private final AutoIntakeCommand autoIntake = new AutoIntakeCommand(intakeSubsystem);
   private final WinchSubsystem winch = new WinchSubsystem();
   private final MoveWinchCommand winchCommand = new MoveWinchCommand(winch,leftJoystick,rightJoystick,buttonBoard);
 
-  //J+J summer bash stuff
-  private final FullShootCommand shootCommand = new FullShootCommand(intakeSubsystem, conveyorSubsystem, shooterSubsystem);
-  private final RotateCommand rotateCommand = new RotateCommand(drivetrainSubsystem, rightJoystick);
-  private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
-  private final JoystickButton intake = new JoystickButton(buttonBoard, 11);
-
-  //Teleop and autonomous command
   private Command teleOp;
   private Command autonomous;
 
@@ -131,19 +105,16 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    
     configureButtonBindings();
-    //Creates teleop command
     teleOp = new ParallelCommandGroup(intakeCommand,winchCommand);
-    //Sets up photonvision if we use that ever
     PortForwarder.add(5800, "photonvision.local", 5800);
-    //Sets the LED colors
     LEDS.setBlinkin1Pattern(LEDStyleEnum.LIME.value);
     LEDS.setBlinkin2Pattern(LEDStyleEnum.LIME.value);
   }
 
-  //Gets the leds
   public LEDSubsystem getLEDS() {
-    return LEDS;
+      return LEDS;
   }
 
   /**
@@ -155,24 +126,31 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //Configures the buttons
-    // autoAlignButton.whenHeld(autoAlignCommand);
-    // autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
-    // shootMacroButton.whenPressed(shooterMacro);
-    shootMacroButton.whenHeld(shooterMacro);
+    autoAlignButton.whenHeld(autoAlignCommand);
+    autoAlignAndDriveButton.whenHeld(autoAlignAndDrive);
+    shootMacroButton.whenPressed(shooterMacro);
+  }
+
+  public Command getAutoCommand() {
+    return autonomous;
+  }
+
+  public Command getTeleOpCommand() {
+    return teleOp;
+  }
+
+  public Command getDriveCommand() {
+    return driveCommand;
   }
 
   public void setAutoCommand(AutoModeEnum mode, double delay) {
-    //Sets the auto command based on shuffleboard settings
     if(mode == AutoModeEnum.ONE_BALL){
-      //Shoots, delays, then taxis
       autonomous = new SequentialCommandGroup(
         new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem),
         new WaitCommand(delay),
         autonomousDrive
       );
     }else if(mode == AutoModeEnum.TWO_BALL){
-      //Intakes another ball, drive back, and double shoot
       autonomous = new SequentialCommandGroup(
         new WaitCommand(delay),
         autoDropForward,
@@ -209,7 +187,6 @@ public class RobotContainer {
         new ShooterMacro(shooterSubsystem, conveyorSubsystem)
       );
     }else if(mode == AutoModeEnum.DEFENSE){
-      //Same as two ball but intakes a opposition cargo after
       autonomous = new SequentialCommandGroup(
         new WaitCommand(delay),
         autoDropForward,
@@ -259,7 +236,6 @@ public class RobotContainer {
         new AutoIntakeCommand(intakeSubsystem)
       );
     }else if(mode == AutoModeEnum.THREE_BALL){
-      //Shoots, double intakes, then double shoots
       autonomous = new SequentialCommandGroup(
         new ShootOneBallCommand(shooterSubsystem, conveyorSubsystem),
         autoDropForward,
@@ -313,20 +289,6 @@ public class RobotContainer {
     }
   }
 
-  //Command and subsystem getters
-
-  public Command getAutoCommand() {
-    return autonomous;
-  }
-
-  public Command getTeleOpCommand() {
-    return teleOp;
-  }
-
-  public Command getDriveCommand() {
-    return driveCommand;
-  }
-
   public DrivetrainSubsystem getDriveSubsystem(){
     return drivetrainSubsystem;
   }
@@ -361,9 +323,5 @@ public class RobotContainer {
 
   public SecondaryClimberCommand getSecondaryClimberCommand() {
       return secondaryClimberCommand;
-  }
-
-  public RotateCommand getRotateCommand(){
-      return rotateCommand;
   }
 }
